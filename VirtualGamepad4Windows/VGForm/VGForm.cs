@@ -13,7 +13,7 @@ namespace VirtualGamepad4Windows
     public partial class VGForm : Form
     {
         public bool mAllowVisible;
-        public VGForm()
+        public VGForm(string[] args)
         {
             InitializeComponent();
         }
