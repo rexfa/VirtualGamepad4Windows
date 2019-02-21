@@ -43,6 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\ControlSerivce.cs" />
+    <Compile Include="Control\ScpDevice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Control\ScpDevice.Designer.cs">
+      <DependentUpon>ScpDevice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\X360Device.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Control\X360Device.Designer.cs">
+      <DependentUpon>X360Device.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VGForm\VGForm.cs">

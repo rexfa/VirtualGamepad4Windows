@@ -7,7 +7,7 @@ using System.Media;
 
 namespace VirtualGamepad4Windows
 {
-    class ControlSerivce
+    public class ControlSerivce
     {
     }
 }
