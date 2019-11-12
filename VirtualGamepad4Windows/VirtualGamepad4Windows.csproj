@@ -43,13 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="VGControl\ControlSerivce.cs" />
+    <Compile Include="VGControl\ITouchpadBehaviour.cs" />
+    <Compile Include="VGControl\Mouse.cs" />
+    <Compile Include="VGControl\MouseCursor.cs" />
+    <Compile Include="VGControl\MouseWheel.cs" />
     <Compile Include="VGControl\ScpDevice.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="VGControl\ScpDevice.Designer.cs">
       <DependentUpon>ScpDevice.cs</DependentUpon>
     </Compile>
-    <Compile Include="VGControl\TouchpadEventArgs.cs" />
+    <Compile Include="VGLibrary\VGSixaxis.cs" />
+    <Compile Include="VGLibrary\VGTouchpad.cs" />
     <Compile Include="VGControl\X360Device.cs">
       <SubType>Component</SubType>
     </Compile>
