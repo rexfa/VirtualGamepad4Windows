@@ -42,17 +42,18 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\ControlSerivce.cs" />
-    <Compile Include="Control\ScpDevice.cs">
+    <Compile Include="VGControl\ControlSerivce.cs" />
+    <Compile Include="VGControl\ScpDevice.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Control\ScpDevice.Designer.cs">
+    <Compile Include="VGControl\ScpDevice.Designer.cs">
       <DependentUpon>ScpDevice.cs</DependentUpon>
     </Compile>
-    <Compile Include="Control\X360Device.cs">
+    <Compile Include="VGControl\TouchpadEventArgs.cs" />
+    <Compile Include="VGControl\X360Device.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Control\X360Device.Designer.cs">
+    <Compile Include="VGControl\X360Device.Designer.cs">
       <DependentUpon>X360Device.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="VGForm\WinProgs.Designer.cs">
       <DependentUpon>WinProgs.cs</DependentUpon>
     </Compile>
+    <Compile Include="VGLibrary\VGState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -86,6 +88,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="VGForm\VGForm.resx">
+      <DependentUpon>VGForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

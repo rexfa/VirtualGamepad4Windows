@@ -17,7 +17,7 @@ namespace VirtualGamepad4Windows
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
         private static String SingleAppComEventName = "{47bf37c7-e896-43ac-a731-5c50491ecdb6}";
-        //static Mutex mutex = new Mutex(true, "{FI329DM2-DS4W-J2K2-HYES-92H21B3WJARG}");
+        static Mutex mutex = new Mutex(true, "{1B33AD-VG4W-2019-REXZ-6CD266065476179A}");
         private static BackgroundWorker singleAppComThread = null;
         private static EventWaitHandle threadComEvent = null;
         //public static ControlService rootHub;
@@ -32,7 +32,7 @@ namespace VirtualGamepad4Windows
             }
             catch
             {
-                // 忽略提高进程优先级时候的异常
+                // 忽略提高进程优先级时候的异常                
             }
             try
             {
@@ -52,7 +52,7 @@ namespace VirtualGamepad4Windows
 
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
-                rootHub = new ControlService();
+                //rootHub = new ControlService();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new VGForm(args));
