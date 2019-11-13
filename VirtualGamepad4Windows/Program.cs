@@ -20,7 +20,7 @@ namespace VirtualGamepad4Windows
         static Mutex mutex = new Mutex(true, "{1B33AD-VG4W-2019-REXZ-6CD266065476179A}");
         private static BackgroundWorker singleAppComThread = null;
         private static EventWaitHandle threadComEvent = null;
-        //public static ControlService rootHub;
+        public static ControlService controlService;
 
         [STAThread]
         static void Main(string[] args)
@@ -52,7 +52,7 @@ namespace VirtualGamepad4Windows
 
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
-                //rootHub = new ControlService();
+                controlService = new ControlService();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new VGForm(args));
