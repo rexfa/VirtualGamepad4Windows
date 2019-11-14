@@ -42,6 +42,7 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VGControl\CommandService.cs" />
     <Compile Include="VGControl\ControlService.cs" />
     <Compile Include="VGControl\ITouchpadBehaviour.cs" />
     <Compile Include="VGControl\Mouse.cs" />
@@ -54,6 +55,8 @@
       <DependentUpon>ScpDevice.cs</DependentUpon>
     </Compile>
     <Compile Include="VGLibrary\NativeMethods.cs" />
+    <Compile Include="VGLibrary\VGDevice.cs" />
+    <Compile Include="VGLibrary\VGDevicePool.cs" />
     <Compile Include="VGLibrary\VGSixaxis.cs" />
     <Compile Include="VGLibrary\VGTouchpad.cs" />
     <Compile Include="VGControl\X360Device.cs">
