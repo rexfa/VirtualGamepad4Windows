@@ -21,6 +21,10 @@ namespace VirtualGamepad4Windows
 
         /// Client handler
         private ClientManager _clientManager;
+        /// List of client connections
+        private List _clientConnections = new List();
+        private BackgroundWorker _listenThread = new BackgroundWorker();
+
 
         public CommandService(string ipAddrees, int port)
         {
@@ -39,7 +43,7 @@ namespace VirtualGamepad4Windows
             }
         }
 
-        private BackgroundWorker _listenThread = new BackgroundWorker();
+       
 
         public void Start()
         {
@@ -73,8 +77,7 @@ namespace VirtualGamepad4Windows
             }
         }
 
-        /// List of client connections
-        private List _clientConnections = new List();
+
 
         public int ConnectionsCount
         {
