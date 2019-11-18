@@ -22,7 +22,7 @@ namespace VirtualGamepad4Windows
         /// Client handler
         private ClientManager _clientManager;
         /// List of client connections
-        private List _clientConnections = new List();
+        private List<Socket> _clientConnections = new List<Socket>();
         private BackgroundWorker _listenThread = new BackgroundWorker();
 
 
@@ -95,21 +95,18 @@ namespace VirtualGamepad4Windows
 
             this._clientManager.HandleClient(clientSocket);
         }
-
-
-
     }
 
 
     public class ClientManager
     {
 
-        private List _clientProcessors = new List();
+        private List<BackgroundWorker> _clientProcessors = new List<BackgroundWorker>();
 
 
-        private List _connections;
+        private List<Socket> _connections;
 
-        public ClientManager(List connections)
+        public ClientManager(List<Socket> connections)
         {
             this._connections = connections;
         }
@@ -122,7 +119,7 @@ namespace VirtualGamepad4Windows
 
             this._clientProcessors.Add(clientProcessor);
 
-            List args = new List();
+            List<Socket> args = new List<Socket>();
             // 
             // args.Add(...);           
 
@@ -132,25 +129,27 @@ namespace VirtualGamepad4Windows
         private void ClientProcessing(object sender, DoWorkEventArgs e)
         {
             // reading args
-            List args = (List)e.Argument;
+            List<Socket> args = (List<Socket>)e.Argument;
 
-            ProtocolSerializer serializer = new ProtocolSerializer();
-
-            try
+            //ProtocolSerializer serializer = new ProtocolSerializer();
+            foreach (Socket socket in args)
             {
-                while (socket.Connected)
+                try
+                {
+                    while (socket.Connected)
+                    {
+                        // ...
+
+                    }
+                }
+                catch (SocketException)
                 {
                     // ...
-
                 }
-            }
-            catch (SocketException)
-            {
-                // ...
-            }
-            catch (Exception)
-            {
-                // ...
+                catch (Exception)
+                {
+                    // ...
+                }
             }
         }
     }
