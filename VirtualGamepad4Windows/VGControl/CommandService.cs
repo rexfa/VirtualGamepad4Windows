@@ -139,6 +139,7 @@ namespace VirtualGamepad4Windows
                     while (socket.Connected)
                     {
                         // ...
+                        if(socket.ReceiveAsync)
 
                     }
                 }

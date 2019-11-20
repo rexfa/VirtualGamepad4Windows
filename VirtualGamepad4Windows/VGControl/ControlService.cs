@@ -17,17 +17,18 @@ namespace VirtualGamepad4Windows
         }
         public bool Start(bool showlog = true)
         {
+            return false;
         }
         public bool HotPlug()
         {
             if (running)
             {
                 //findControllers
-                foreach (DS4Device device in devices)
-                {
-                    if (device.IsDisconnecting)
-                    { }
-                }
+                //foreach (DS4Device device in devices)
+                //{
+                //    if (device.IsDisconnecting)
+                //    { }
+                //}
 
             }
             return true;

@@ -48,5 +48,10 @@ namespace VirtualGamepad4Windows
             try { base.WndProc(ref m); }
             catch { }
         }
+
+        private void btn_Test_Click(object sender, EventArgs e)
+        {
+            Program.controlService.Start();
+        }
     }
 }

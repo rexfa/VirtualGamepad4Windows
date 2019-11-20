@@ -21,6 +21,7 @@ namespace VirtualGamepad4Windows
         private static BackgroundWorker singleAppComThread = null;
         private static EventWaitHandle threadComEvent = null;
         public static ControlService controlService;
+        public static CommandService commandService; 
 
         [STAThread]
         static void Main(string[] args)
@@ -53,6 +54,7 @@ namespace VirtualGamepad4Windows
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 controlService = new ControlService();
+                commandService = new CommandService("127.0.0.1",11011);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new VGForm(args));
