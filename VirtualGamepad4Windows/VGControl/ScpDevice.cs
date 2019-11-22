@@ -705,6 +705,8 @@ namespace VirtualGamepad4Windows
         protected static extern Boolean SetupDiSetClassInstallParams(IntPtr DeviceInfoSet, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, ref SP_PROPCHANGE_PARAMS ClassInstallParams, Int32 ClassInstallParamsSize);
         #endregion
     }
+
+    /*
     public class Global
     {
         protected static BackingStore m_Config = new BackingStore();
@@ -938,127 +940,130 @@ namespace VirtualGamepad4Windows
                     return sA;
             return new SpecialAction("null", "null", "null", "null");
         }
+        */
 
+    /*public static X360Controls getCustomButton(int device, DS4Controls controlName) => m_Config.GetCustomButton(device, controlName);
 
-        /*public static X360Controls getCustomButton(int device, DS4Controls controlName) => m_Config.GetCustomButton(device, controlName);
-        
-        public static ushort getCustomKey(int device, DS4Controls controlName) => m_Config.GetCustomKey(device, controlName);
-        
-        public static string getCustomMacro(int device, DS4Controls controlName) => m_Config.GetCustomMacro(device, controlName);
-        
-        public static string getCustomExtras(int device, DS4Controls controlName) => m_Config.GetCustomExtras(device, controlName);
-        
-        public static DS4KeyType getCustomKeyType(int device, DS4Controls controlName) => m_Config.GetCustomKeyType(device, controlName);
-        
-        public static bool getHasCustomKeysorButtons(int device) => m_Config.customMapButtons[device].Count > 0
-                || m_Config.customMapKeys[device].Count > 0;
-        
-        public static bool getHasCustomExtras(int device) => m_Config.customMapExtras[device].Count > 0;        
-        public static Dictionary<DS4Controls, X360Controls> getCustomButtons(int device) => m_Config.customMapButtons[device];        
-        public static Dictionary<DS4Controls, ushort> getCustomKeys(int device) => m_Config.customMapKeys[device];        
-        public static Dictionary<DS4Controls, string> getCustomMacros(int device) => m_Config.customMapMacros[device];        
-        public static Dictionary<DS4Controls, string> getCustomExtras(int device) => m_Config.customMapExtras[device];
-        public static Dictionary<DS4Controls, DS4KeyType> getCustomKeyTypes(int device) => m_Config.customMapKeyTypes[device];        
+    public static ushort getCustomKey(int device, DS4Controls controlName) => m_Config.GetCustomKey(device, controlName);
 
-        public static X360Controls getShiftCustomButton(int device, DS4Controls controlName) => m_Config.GetShiftCustomButton(device, controlName);        
-        public static ushort getShiftCustomKey(int device, DS4Controls controlName) => m_Config.GetShiftCustomKey(device, controlName);        
-        public static string getShiftCustomMacro(int device, DS4Controls controlName) => m_Config.GetShiftCustomMacro(device, controlName);        
-        public static string getShiftCustomExtras(int device, DS4Controls controlName) => m_Config.GetShiftCustomExtras(device, controlName);        
-        public static DS4KeyType getShiftCustomKeyType(int device, DS4Controls controlName) => m_Config.GetShiftCustomKeyType(device, controlName);        
-        public static bool getHasShiftCustomKeysorButtons(int device) => m_Config.shiftCustomMapButtons[device].Count > 0
-                || m_Config.shiftCustomMapKeys[device].Count > 0;        
-        public static bool getHasShiftCustomExtras(int device) => m_Config.shiftCustomMapExtras[device].Count > 0;        
-        public static Dictionary<DS4Controls, X360Controls> getShiftCustomButtons(int device) => m_Config.shiftCustomMapButtons[device];        
-        public static Dictionary<DS4Controls, ushort> getShiftCustomKeys(int device) => m_Config.shiftCustomMapKeys[device];        
-        public static Dictionary<DS4Controls, string> getShiftCustomMacros(int device) => m_Config.shiftCustomMapMacros[device];        
-        public static Dictionary<DS4Controls, string> getShiftCustomExtras(int device) => m_Config.shiftCustomMapExtras[device];        
-        public static Dictionary<DS4Controls, DS4KeyType> getShiftCustomKeyTypes(int device) => m_Config.shiftCustomMapKeyTypes[device]; */
-        public static bool Load() => m_Config.Load();
+    public static string getCustomMacro(int device, DS4Controls controlName) => m_Config.GetCustomMacro(device, controlName);
 
-        public static void LoadProfile(int device, bool launchprogram, ControlService control)
-        {
-            m_Config.LoadProfile(device, launchprogram, control);
-            tempprofilename[device] = string.Empty;
-        }
+    public static string getCustomExtras(int device, DS4Controls controlName) => m_Config.GetCustomExtras(device, controlName);
 
-        public static void LoadTempProfile(int device, string name, bool launchprogram, ControlService control)
-        {
-            m_Config.LoadProfile(device, launchprogram, control, appdatapath + @"\Profiles\" + name + ".xml");
-            tempprofilename[device] = name;
-        }
+    public static DS4KeyType getCustomKeyType(int device, DS4Controls controlName) => m_Config.GetCustomKeyType(device, controlName);
 
-        public static bool Save()
-        {
-            return m_Config.Save();
-        }
+    public static bool getHasCustomKeysorButtons(int device) => m_Config.customMapButtons[device].Count > 0
+            || m_Config.customMapKeys[device].Count > 0;
 
-        public static void SaveProfile(int device, string propath)
-        {
-            m_Config.SaveProfile(device, propath);
-        }
+    public static bool getHasCustomExtras(int device) => m_Config.customMapExtras[device].Count > 0;        
+    public static Dictionary<DS4Controls, X360Controls> getCustomButtons(int device) => m_Config.customMapButtons[device];        
+    public static Dictionary<DS4Controls, ushort> getCustomKeys(int device) => m_Config.customMapKeys[device];        
+    public static Dictionary<DS4Controls, string> getCustomMacros(int device) => m_Config.customMapMacros[device];        
+    public static Dictionary<DS4Controls, string> getCustomExtras(int device) => m_Config.customMapExtras[device];
+    public static Dictionary<DS4Controls, DS4KeyType> getCustomKeyTypes(int device) => m_Config.customMapKeyTypes[device];        
 
-        private static byte applyRatio(byte b1, byte b2, double r)
-        {
-            if (r > 100)
-                r = 100;
-            else if (r < 0)
-                r = 0;
-            r /= 100f;
-            return (byte)Math.Round((b1 * (1 - r) + b2 * r), 0);
-        }
-        public static DS4Color getTransitionedColor(DS4Color c1, DS4Color c2, double ratio)
-        {//;
-            //Color cs = Color.FromArgb(c1.red, c1.green, c1.blue);
-            c1.red = applyRatio(c1.red, c2.red, ratio);
-            c1.green = applyRatio(c1.green, c2.green, ratio);
-            c1.blue = applyRatio(c1.blue, c2.blue, ratio);
-            return c1;
-        }
+    public static X360Controls getShiftCustomButton(int device, DS4Controls controlName) => m_Config.GetShiftCustomButton(device, controlName);        
+    public static ushort getShiftCustomKey(int device, DS4Controls controlName) => m_Config.GetShiftCustomKey(device, controlName);        
+    public static string getShiftCustomMacro(int device, DS4Controls controlName) => m_Config.GetShiftCustomMacro(device, controlName);        
+    public static string getShiftCustomExtras(int device, DS4Controls controlName) => m_Config.GetShiftCustomExtras(device, controlName);        
+    public static DS4KeyType getShiftCustomKeyType(int device, DS4Controls controlName) => m_Config.GetShiftCustomKeyType(device, controlName);        
+    public static bool getHasShiftCustomKeysorButtons(int device) => m_Config.shiftCustomMapButtons[device].Count > 0
+            || m_Config.shiftCustomMapKeys[device].Count > 0;        
+    public static bool getHasShiftCustomExtras(int device) => m_Config.shiftCustomMapExtras[device].Count > 0;        
+    public static Dictionary<DS4Controls, X360Controls> getShiftCustomButtons(int device) => m_Config.shiftCustomMapButtons[device];        
+    public static Dictionary<DS4Controls, ushort> getShiftCustomKeys(int device) => m_Config.shiftCustomMapKeys[device];        
+    public static Dictionary<DS4Controls, string> getShiftCustomMacros(int device) => m_Config.shiftCustomMapMacros[device];        
+    public static Dictionary<DS4Controls, string> getShiftCustomExtras(int device) => m_Config.shiftCustomMapExtras[device];        
+    public static Dictionary<DS4Controls, DS4KeyType> getShiftCustomKeyTypes(int device) => m_Config.shiftCustomMapKeyTypes[device]; */
 
-        private static Color applyRatio(Color c1, Color c2, uint r)
-        {
-            float ratio = r / 100f;
-            float hue1 = c1.GetHue();
-            float hue2 = c2.GetHue();
-            float bri1 = c1.GetBrightness();
-            float bri2 = c2.GetBrightness();
-            float sat1 = c1.GetSaturation();
-            float sat2 = c2.GetSaturation();
-            float hr = hue2 - hue1;
-            float br = bri2 - bri1;
-            float sr = sat2 - sat1;
-            Color csR;
-            if (bri1 == 0)
-                csR = HuetoRGB(hue2, sat2, bri2 - br * ratio);
-            else
-                csR = HuetoRGB(hue2 - hr * ratio, sat2 - sr * ratio, bri2 - br * ratio);
-            return csR;
-        }
+    /*
+    public static bool Load() => m_Config.Load();
 
-        public static Color HuetoRGB(float hue, float sat, float bri)
-        {
-            float C = (1 - Math.Abs(2 * bri) - 1) * sat;
-            float X = C * (1 - Math.Abs((hue / 60) % 2 - 1));
-            float m = bri - C / 2;
-            float R, G, B;
-            if (0 <= hue && hue < 60)
-            { R = C; G = X; B = 0; }
-            else if (60 <= hue && hue < 120)
-            { R = X; G = C; B = 0; }
-            else if (120 <= hue && hue < 180)
-            { R = 0; G = C; B = X; }
-            else if (180 <= hue && hue < 240)
-            { R = 0; G = X; B = C; }
-            else if (240 <= hue && hue < 300)
-            { R = X; G = 0; B = C; }
-            else if (300 <= hue && hue < 360)
-            { R = C; G = 0; B = X; }
-            else
-            { R = 255; G = 0; B = 0; }
-            R += m; G += m; B += m;
-            R *= 255; G *= 255; B *= 255;
-            return Color.FromArgb((int)R, (int)G, (int)B);
-        }
-
+    public static void LoadProfile(int device, bool launchprogram, ControlService control)
+    {
+        m_Config.LoadProfile(device, launchprogram, control);
+        tempprofilename[device] = string.Empty;
     }
+
+    public static void LoadTempProfile(int device, string name, bool launchprogram, ControlService control)
+    {
+        m_Config.LoadProfile(device, launchprogram, control, appdatapath + @"\Profiles\" + name + ".xml");
+        tempprofilename[device] = name;
+    }
+
+    public static bool Save()
+    {
+        return m_Config.Save();
+    }
+
+    public static void SaveProfile(int device, string propath)
+    {
+        m_Config.SaveProfile(device, propath);
+    }
+
+    private static byte applyRatio(byte b1, byte b2, double r)
+    {
+        if (r > 100)
+            r = 100;
+        else if (r < 0)
+            r = 0;
+        r /= 100f;
+        return (byte)Math.Round((b1 * (1 - r) + b2 * r), 0);
+    }
+    public static DS4Color getTransitionedColor(DS4Color c1, DS4Color c2, double ratio)
+    {//;
+        //Color cs = Color.FromArgb(c1.red, c1.green, c1.blue);
+        c1.red = applyRatio(c1.red, c2.red, ratio);
+        c1.green = applyRatio(c1.green, c2.green, ratio);
+        c1.blue = applyRatio(c1.blue, c2.blue, ratio);
+        return c1;
+    }
+
+    private static Color applyRatio(Color c1, Color c2, uint r)
+    {
+        float ratio = r / 100f;
+        float hue1 = c1.GetHue();
+        float hue2 = c2.GetHue();
+        float bri1 = c1.GetBrightness();
+        float bri2 = c2.GetBrightness();
+        float sat1 = c1.GetSaturation();
+        float sat2 = c2.GetSaturation();
+        float hr = hue2 - hue1;
+        float br = bri2 - bri1;
+        float sr = sat2 - sat1;
+        Color csR;
+        if (bri1 == 0)
+            csR = HuetoRGB(hue2, sat2, bri2 - br * ratio);
+        else
+            csR = HuetoRGB(hue2 - hr * ratio, sat2 - sr * ratio, bri2 - br * ratio);
+        return csR;
+    }
+
+    public static Color HuetoRGB(float hue, float sat, float bri)
+    {
+        float C = (1 - Math.Abs(2 * bri) - 1) * sat;
+        float X = C * (1 - Math.Abs((hue / 60) % 2 - 1));
+        float m = bri - C / 2;
+        float R, G, B;
+        if (0 <= hue && hue < 60)
+        { R = C; G = X; B = 0; }
+        else if (60 <= hue && hue < 120)
+        { R = X; G = C; B = 0; }
+        else if (120 <= hue && hue < 180)
+        { R = 0; G = C; B = X; }
+        else if (180 <= hue && hue < 240)
+        { R = 0; G = X; B = C; }
+        else if (240 <= hue && hue < 300)
+        { R = X; G = 0; B = C; }
+        else if (300 <= hue && hue < 360)
+        { R = C; G = 0; B = X; }
+        else
+        { R = 255; G = 0; B = 0; }
+        R += m; G += m; B += m;
+        R *= 255; G *= 255; B *= 255;
+        return Color.FromArgb((int)R, (int)G, (int)B);
+    }
+
+
+}*/
 }

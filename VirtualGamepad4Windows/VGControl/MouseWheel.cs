@@ -31,7 +31,7 @@ namespace VirtualGamepad4Windows
             Touch lastT1 = arg.touches[1].previousTouch;
             Touch T0 = arg.touches[0];
             Touch T1 = arg.touches[1];
-
+            /*
             //mouse wheel 120 == 1 wheel click according to Windows API
             double lastMidX = (lastT0.hwX + lastT1.hwX) / 2d, lastMidY = (lastT0.hwY + lastT1.hwY) / 2d,
                currentMidX = (T0.hwX + T1.hwX) / 2d, currentMidY = (T0.hwY + T1.hwY) / 2d;
@@ -54,7 +54,7 @@ namespace VirtualGamepad4Windows
             verticalRemainder = yMotion - yAction;
 
             if (yAction != 0 || xAction != 0)
-                InputMethods.MouseWheel(yAction, xAction);
+                InputMethods.MouseWheel(yAction, xAction);*/
         }
     }
 }

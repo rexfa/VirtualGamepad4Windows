@@ -51,7 +51,9 @@ namespace VirtualGamepad4Windows
 
         private void btn_Test_Click(object sender, EventArgs e)
         {
-            Program.controlService.Start();
+            Program.commandService.Start();
+
+            Console.WriteLine(Program.commandService.ConnectionsCount.ToString());
         }
     }
 }

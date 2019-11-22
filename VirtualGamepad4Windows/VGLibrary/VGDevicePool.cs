@@ -14,6 +14,7 @@ namespace VirtualGamepad4Windows.VGLibrary
         public static bool isExclusiveMode = false;
         public static void findControllers()
         {
+            /*
             lock (Devices)
             {
                 int[] pid = { 0xBA0, 0x5C4, 0x09CC };
@@ -81,7 +82,7 @@ namespace VirtualGamepad4Windows.VGLibrary
                     }
                 }
 
-            }
+            }*/
         }
     }
 }
