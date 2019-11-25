@@ -54,6 +54,7 @@
     <Compile Include="VGControl\ScpDevice.Designer.cs">
       <DependentUpon>ScpDevice.cs</DependentUpon>
     </Compile>
+    <Compile Include="VGControl\ScpUtil.cs" />
     <Compile Include="VGLibrary\NativeMethods.cs" />
     <Compile Include="VGLibrary\VGDevice.cs" />
     <Compile Include="VGLibrary\VGDevicePool.cs" />

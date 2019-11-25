@@ -8,7 +8,7 @@ namespace VirtualGamepad4Windows
 {
     class MouseCursor
     {
-        /*
+        
         private readonly int deviceNumber;
         public MouseCursor(int deviceNum)
         {
@@ -18,9 +18,9 @@ namespace VirtualGamepad4Windows
         // Keep track of remainders when performing moves or we lose fractional parts.
         private double horizontalRemainder = 0.0, verticalRemainder = 0.0;
         private double hRemainder = 0.0, vRemainder = 0.0;
-        */
+        
         /** Indicate x/y direction for doing jitter compensation, etc. */
-        /*
+        
         public enum Direction { Negative, Neutral, Positive }
         // Track direction vector separately and very trivially for now.
         private Direction horizontalDirection = Direction.Neutral, verticalDirection = Direction.Neutral;
@@ -177,6 +177,6 @@ namespace VirtualGamepad4Windows
 
             horizontalDirection = xMotion > 0.0 ? Direction.Positive : xMotion < 0.0 ? Direction.Negative : Direction.Neutral;
             verticalDirection = yMotion > 0.0 ? Direction.Positive : yMotion < 0.0 ? Direction.Negative : Direction.Neutral;
-        }*/
+        }
     }
 }
