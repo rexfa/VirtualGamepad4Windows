@@ -55,6 +55,10 @@
       <DependentUpon>ScpDevice.cs</DependentUpon>
     </Compile>
     <Compile Include="VGControl\ScpUtil.cs" />
+    <Compile Include="VGLibrary\Extensions.cs" />
+    <Compile Include="VGLibrary\HidDevice.cs" />
+    <Compile Include="VGLibrary\HidDeviceAttributes.cs" />
+    <Compile Include="VGLibrary\HidDeviceCapabilities.cs" />
     <Compile Include="VGLibrary\NativeMethods.cs" />
     <Compile Include="VGLibrary\VGDevice.cs" />
     <Compile Include="VGLibrary\VGDevicePool.cs" />
@@ -102,6 +106,9 @@
     <EmbeddedResource Include="VGForm\VGForm.resx">
       <DependentUpon>VGForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VGLibrary\LICENSE.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
