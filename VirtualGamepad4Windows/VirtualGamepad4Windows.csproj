@@ -59,6 +59,7 @@
     <Compile Include="VGLibrary\HidDevice.cs" />
     <Compile Include="VGLibrary\HidDeviceAttributes.cs" />
     <Compile Include="VGLibrary\HidDeviceCapabilities.cs" />
+    <Compile Include="VGLibrary\HidDevices.cs" />
     <Compile Include="VGLibrary\NativeMethods.cs" />
     <Compile Include="VGLibrary\VGDevice.cs" />
     <Compile Include="VGLibrary\VGDevicePool.cs" />

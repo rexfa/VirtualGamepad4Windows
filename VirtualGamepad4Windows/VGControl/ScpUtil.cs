@@ -290,13 +290,13 @@ namespace VirtualGamepad4Windows
         public static string[] SATriggers => m_Config.sATriggers;
         public static int[] GyroSensitivity => m_Config.gyroSensitivity;
         public static int[] GyroInvert => m_Config.gyroInvert;
-        public static DS4Color[] MainColor => m_Config.m_Leds;
-        public static DS4Color[] LowColor => m_Config.m_LowLeds;
-        public static DS4Color[] ChargingColor => m_Config.m_ChargingLeds;
-        public static DS4Color[] CustomColor => m_Config.m_CustomLeds;
+        public static VGColor[] MainColor => m_Config.m_Leds;
+        public static VGColor[] LowColor => m_Config.m_LowLeds;
+        public static VGColor[] ChargingColor => m_Config.m_ChargingLeds;
+        public static VGColor[] CustomColor => m_Config.m_CustomLeds;
         public static bool[] UseCustomLed => m_Config.useCustomLeds;
 
-        public static DS4Color[] FlashColor => m_Config.m_FlashLeds;
+        public static VGColor[] FlashColor => m_Config.m_FlashLeds;
         public static byte[] TapSensitivity => m_Config.tapSensitivity;
         public static bool[] DoubleTap => m_Config.doubleTap;
         public static int[] ScrollSensitivity => m_Config.scrollSensitivity;
@@ -438,7 +438,7 @@ namespace VirtualGamepad4Windows
             r /= 100f;
             return (byte)Math.Round((b1 * (1 - r) + b2 * r), 0);
         }
-        public static DS4Color getTransitionedColor(DS4Color c1, DS4Color c2, double ratio)
+        public static VGColor getTransitionedColor(VGColor c1, VGColor c2, double ratio)
         {//;
             //Color cs = Color.FromArgb(c1.red, c1.green, c1.blue);
             c1.red = applyRatio(c1.red, c2.red, ratio);
@@ -1831,7 +1831,7 @@ namespace VirtualGamepad4Windows
                             Item = m_Xdoc.SelectSingleNode("/Profile/CustomLed" + (i + 1));
                             string[] ss = Item.InnerText.Split(':');
                             bool.TryParse(ss[0], out useCustomLeds[i]);
-                            DS4Color.TryParse(ss[1], ref m_CustomLeds[i]);
+                            VGColor.TryParse(ss[1], ref m_CustomLeds[i]);
                         }
                         catch { missingSetting = true; }
                     }

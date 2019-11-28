@@ -45,6 +45,10 @@ namespace VirtualGamepad4Windows
             else
                 return false;
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         public Color ToColor => Color.FromArgb(red, green, blue);
         public Color ToColorA
         {
@@ -108,8 +112,8 @@ namespace VirtualGamepad4Windows
         private const int BT_INPUT_REPORT_LENGTH = 547;
         private HidDevice hDevice;
         private string Mac;
-        private DS4State cState = new DS4State();
-        private DS4State pState = new DS4State();
+        private VGState cState = new VGState();
+        private VGState pState = new VGState();
         private ConnectionType conType;
         private byte[] accel = new byte[6];
         private byte[] gyro = new byte[6];
