@@ -12,16 +12,16 @@ using System.Security.Principal;
 namespace VirtualGamepad4Windows
 {
     [Flags]
-    public enum DS4KeyType : byte { None = 0, ScanCode = 1, Toggle = 2, Unbound = 4, Macro = 8, HoldMacro = 16, RepeatMacro = 32 }; //Increment by exponents of 2*, starting at 2^0
+    public enum VGKeyType : byte { None = 0, ScanCode = 1, Toggle = 2, Unbound = 4, Macro = 8, HoldMacro = 16, RepeatMacro = 32 }; //Increment by exponents of 2*, starting at 2^0
     public enum Ds3PadId : byte { None = 0xFF, One = 0x00, Two = 0x01, Three = 0x02, Four = 0x03, All = 0x04 };
-    public enum DS4Controls : byte { None, LXNeg, LXPos, LYNeg, LYPos, RXNeg, RXPos, RYNeg, RYPos, L1, L2, L3, R1, R2, R3, Square, Triangle, Circle, Cross, DpadUp, DpadRight, DpadDown, DpadLeft, PS, TouchLeft, TouchUpper, TouchMulti, TouchRight, Share, Options, GyroXPos, GyroXNeg, GyroZPos, GyroZNeg, SwipeLeft, SwipeRight, SwipeUp, SwipeDown };
+    public enum VGControls : byte { None, LXNeg, LXPos, LYNeg, LYPos, RXNeg, RXPos, RYNeg, RYPos, L1, L2, L3, R1, R2, R3, Square, Triangle, Circle, Cross, DpadUp, DpadRight, DpadDown, DpadLeft, PS, TouchLeft, TouchUpper, TouchMulti, TouchRight, Share, Options, GyroXPos, GyroXNeg, GyroZPos, GyroZNeg, SwipeLeft, SwipeRight, SwipeUp, SwipeDown };
     public enum X360Controls : byte { None, LXNeg, LXPos, LYNeg, LYPos, RXNeg, RXPos, RYNeg, RYPos, LB, LT, LS, RB, RT, RS, X, Y, B, A, DpadUp, DpadRight, DpadDown, DpadLeft, Guide, Back, Start, LeftMouse, RightMouse, MiddleMouse, FourthMouse, FifthMouse, WUP, WDOWN, MouseUp, MouseDown, MouseLeft, MouseRight, Unbound };
 
     public class DS4ControlSettings
     {
-        public DS4Controls control;
+        public VGControls control;
         public string extras = "0,0,0,0,0,0,0,0";
-        public DS4KeyType keyType = DS4KeyType.None;
+        public VGKeyType keyType = VGKeyType.None;
         public enum ActionType : byte { Default, Key, Button, Macro };
         public ActionType actionType = ActionType.Default;
         public object action = null;
@@ -29,9 +29,9 @@ namespace VirtualGamepad4Windows
         public object shiftAction = null;
         public int shiftTrigger = 0;
         public string shiftExtras = "0,0,0,0,0,0,0,0";
-        public DS4KeyType shiftKeyType = DS4KeyType.None;
+        public VGKeyType shiftKeyType = VGKeyType.None;
 
-        public DS4ControlSettings(DS4Controls ctrl)
+        public DS4ControlSettings(VGControls ctrl)
         {
             control = ctrl;
         }
@@ -39,17 +39,17 @@ namespace VirtualGamepad4Windows
         public void Reset()
         {
             extras = "0,0,0,0,0,0,0,0";
-            keyType = DS4KeyType.None;
+            keyType = VGKeyType.None;
             actionType = ActionType.Default;
             action = null;
             shiftActionType = ActionType.Default;
             shiftAction = null;
             shiftTrigger = 0;
             shiftExtras = "0,0,0,0,0,0,0,0";
-            shiftKeyType = DS4KeyType.None;
+            shiftKeyType = VGKeyType.None;
         }
 
-        internal void UpdateSettings(bool shift, object act, string exts, DS4KeyType kt, int trigger = 0)
+        internal void UpdateSettings(bool shift, object act, string exts, VGKeyType kt, int trigger = 0)
         {
             if (!shift)
             {
@@ -322,7 +322,7 @@ namespace VirtualGamepad4Windows
         public static string[] ProfilePath => m_Config.profilePath;
         public static List<string>[] ProfileActions => m_Config.profileActions;
 
-        public static void UpdateDS4CSetting(int deviceNum, string buttonName, bool shift, object action, string exts, DS4KeyType kt, int trigger = 0)
+        public static void UpdateDS4CSetting(int deviceNum, string buttonName, bool shift, object action, string exts, VGKeyType kt, int trigger = 0)
         {
             m_Config.UpdateDS4CSetting(deviceNum, buttonName, shift, action, exts, kt, trigger);
         }
@@ -332,7 +332,7 @@ namespace VirtualGamepad4Windows
         }
 
         public static object GetDS4Action(int deviceNum, string buttonName, bool shift) => m_Config.GetDS4Action(deviceNum, buttonName, shift);
-        public static DS4KeyType GetDS4KeyType(int deviceNum, string buttonName, bool shift) => m_Config.GetDS4KeyType(deviceNum, buttonName, shift);
+        public static VGKeyType GetDS4KeyType(int deviceNum, string buttonName, bool shift) => m_Config.GetDS4KeyType(deviceNum, buttonName, shift);
         public static string GetDS4Extra(int deviceNum, string buttonName, bool shift) => m_Config.GetDS4Extra(deviceNum, buttonName, shift);
         public static int GetDS4STrigger(int deviceNum, string buttonName) => m_Config.GetDS4STrigger(deviceNum, buttonName);
         public static List<DS4ControlSettings> getDS4CSettings(int device) => m_Config.ds4settings[device];
@@ -614,8 +614,8 @@ namespace VirtualGamepad4Windows
         {
             for (int i = 0; i < 5; i++)
             {
-                foreach (DS4Controls dc in Enum.GetValues(typeof(DS4Controls)))
-                    if (dc != DS4Controls.None)
+                foreach (VGControls dc in Enum.GetValues(typeof(VGControls)))
+                    if (dc != VGControls.None)
                         ds4settings[i].Add(new DS4ControlSettings(dc));
                 /*customMapKeyTypes[i] = new Dictionary<DS4Controls, DS4KeyType>();
                 customMapKeys[i] = new Dictionary<DS4Controls, UInt16>();
@@ -801,15 +801,15 @@ namespace VirtualGamepad4Windows
 
                         if (dcs.action is string)
                             if (dcs.action.ToString() == "Unbound")
-                                keyType += DS4KeyType.Unbound;
-                        if (dcs.keyType.HasFlag(DS4KeyType.HoldMacro))
-                            keyType += DS4KeyType.HoldMacro;
-                        if (dcs.keyType.HasFlag(DS4KeyType.Macro))
-                            keyType += DS4KeyType.Macro;
-                        if (dcs.keyType.HasFlag(DS4KeyType.Toggle))
-                            keyType += DS4KeyType.Toggle;
-                        if (dcs.keyType.HasFlag(DS4KeyType.ScanCode))
-                            keyType += DS4KeyType.ScanCode;
+                                keyType += VGKeyType.Unbound;
+                        if (dcs.keyType.HasFlag(VGKeyType.HoldMacro))
+                            keyType += VGKeyType.HoldMacro;
+                        if (dcs.keyType.HasFlag(VGKeyType.Macro))
+                            keyType += VGKeyType.Macro;
+                        if (dcs.keyType.HasFlag(VGKeyType.Toggle))
+                            keyType += VGKeyType.Toggle;
+                        if (dcs.keyType.HasFlag(VGKeyType.ScanCode))
+                            keyType += VGKeyType.ScanCode;
                         if (keyType != string.Empty)
                         {
                             buttonNode = m_Xdoc.CreateNode(XmlNodeType.Element, dcs.control.ToString(), null);
@@ -858,15 +858,15 @@ namespace VirtualGamepad4Windows
 
                         if (dcs.shiftAction is string)
                             if (dcs.shiftAction.ToString() == "Unbound")
-                                keyType += DS4KeyType.Unbound;
-                        if (dcs.shiftKeyType.HasFlag(DS4KeyType.HoldMacro))
-                            keyType += DS4KeyType.HoldMacro;
-                        if (dcs.shiftKeyType.HasFlag(DS4KeyType.Macro))
-                            keyType += DS4KeyType.Macro;
-                        if (dcs.shiftKeyType.HasFlag(DS4KeyType.Toggle))
-                            keyType += DS4KeyType.Toggle;
-                        if (dcs.shiftKeyType.HasFlag(DS4KeyType.ScanCode))
-                            keyType += DS4KeyType.ScanCode;
+                                keyType += VGKeyType.Unbound;
+                        if (dcs.shiftKeyType.HasFlag(VGKeyType.HoldMacro))
+                            keyType += VGKeyType.HoldMacro;
+                        if (dcs.shiftKeyType.HasFlag(VGKeyType.Macro))
+                            keyType += VGKeyType.Macro;
+                        if (dcs.shiftKeyType.HasFlag(VGKeyType.Toggle))
+                            keyType += VGKeyType.Toggle;
+                        if (dcs.shiftKeyType.HasFlag(VGKeyType.ScanCode))
+                            keyType += VGKeyType.ScanCode;
                         if (keyType != string.Empty)
                         {
                             buttonNode = m_Xdoc.CreateElement(dcs.control.ToString());
@@ -1038,138 +1038,138 @@ namespace VirtualGamepad4Windows
             return Saved;
         }
 
-        private DS4Controls getDS4ControlsByName(string key)
+        private VGControls getDS4ControlsByName(string key)
         {
 
             if (!key.StartsWith("bn"))
-                return (DS4Controls)Enum.Parse(typeof(DS4Controls), key, true);
+                return (VGControls)Enum.Parse(typeof(VGControls), key, true);
             switch (key)
             {
-                case "bnShare": return DS4Controls.Share;
-                case "bnL3": return DS4Controls.L3;
-                case "bnR3": return DS4Controls.R3;
-                case "bnOptions": return DS4Controls.Options;
-                case "bnUp": return DS4Controls.DpadUp;
-                case "bnRight": return DS4Controls.DpadRight;
-                case "bnDown": return DS4Controls.DpadDown;
-                case "bnLeft": return DS4Controls.DpadLeft;
+                case "bnShare": return VGControls.Share;
+                case "bnL3": return VGControls.L3;
+                case "bnR3": return VGControls.R3;
+                case "bnOptions": return VGControls.Options;
+                case "bnUp": return VGControls.DpadUp;
+                case "bnRight": return VGControls.DpadRight;
+                case "bnDown": return VGControls.DpadDown;
+                case "bnLeft": return VGControls.DpadLeft;
 
-                case "bnL1": return DS4Controls.L1;
-                case "bnR1": return DS4Controls.R1;
-                case "bnTriangle": return DS4Controls.Triangle;
-                case "bnCircle": return DS4Controls.Circle;
-                case "bnCross": return DS4Controls.Cross;
-                case "bnSquare": return DS4Controls.Square;
+                case "bnL1": return VGControls.L1;
+                case "bnR1": return VGControls.R1;
+                case "bnTriangle": return VGControls.Triangle;
+                case "bnCircle": return VGControls.Circle;
+                case "bnCross": return VGControls.Cross;
+                case "bnSquare": return VGControls.Square;
 
-                case "bnPS": return DS4Controls.PS;
-                case "bnLSLeft": return DS4Controls.LXNeg;
-                case "bnLSUp": return DS4Controls.LYNeg;
-                case "bnRSLeft": return DS4Controls.RXNeg;
-                case "bnRSUp": return DS4Controls.RYNeg;
+                case "bnPS": return VGControls.PS;
+                case "bnLSLeft": return VGControls.LXNeg;
+                case "bnLSUp": return VGControls.LYNeg;
+                case "bnRSLeft": return VGControls.RXNeg;
+                case "bnRSUp": return VGControls.RYNeg;
 
-                case "bnLSRight": return DS4Controls.LXPos;
-                case "bnLSDown": return DS4Controls.LYPos;
-                case "bnRSRight": return DS4Controls.RXPos;
-                case "bnRSDown": return DS4Controls.RYPos;
-                case "bnL2": return DS4Controls.L2;
-                case "bnR2": return DS4Controls.R2;
+                case "bnLSRight": return VGControls.LXPos;
+                case "bnLSDown": return VGControls.LYPos;
+                case "bnRSRight": return VGControls.RXPos;
+                case "bnRSDown": return VGControls.RYPos;
+                case "bnL2": return VGControls.L2;
+                case "bnR2": return VGControls.R2;
 
-                case "bnTouchLeft": return DS4Controls.TouchLeft;
-                case "bnTouchMulti": return DS4Controls.TouchMulti;
-                case "bnTouchUpper": return DS4Controls.TouchUpper;
-                case "bnTouchRight": return DS4Controls.TouchRight;
-                case "bnGyroXP": return DS4Controls.GyroXPos;
-                case "bnGyroXN": return DS4Controls.GyroXNeg;
-                case "bnGyroZP": return DS4Controls.GyroZPos;
-                case "bnGyroZN": return DS4Controls.GyroZNeg;
+                case "bnTouchLeft": return VGControls.TouchLeft;
+                case "bnTouchMulti": return VGControls.TouchMulti;
+                case "bnTouchUpper": return VGControls.TouchUpper;
+                case "bnTouchRight": return VGControls.TouchRight;
+                case "bnGyroXP": return VGControls.GyroXPos;
+                case "bnGyroXN": return VGControls.GyroXNeg;
+                case "bnGyroZP": return VGControls.GyroZPos;
+                case "bnGyroZN": return VGControls.GyroZNeg;
 
-                case "bnSwipeUp": return DS4Controls.SwipeUp;
-                case "bnSwipeDown": return DS4Controls.SwipeDown;
-                case "bnSwipeLeft": return DS4Controls.SwipeLeft;
-                case "bnSwipeRight": return DS4Controls.SwipeRight;
+                case "bnSwipeUp": return VGControls.SwipeUp;
+                case "bnSwipeDown": return VGControls.SwipeDown;
+                case "bnSwipeLeft": return VGControls.SwipeLeft;
+                case "bnSwipeRight": return VGControls.SwipeRight;
 
                 #region OldShiftname
-                case "sbnShare": return DS4Controls.Share;
-                case "sbnL3": return DS4Controls.L3;
-                case "sbnR3": return DS4Controls.R3;
-                case "sbnOptions": return DS4Controls.Options;
-                case "sbnUp": return DS4Controls.DpadUp;
-                case "sbnRight": return DS4Controls.DpadRight;
-                case "sbnDown": return DS4Controls.DpadDown;
-                case "sbnLeft": return DS4Controls.DpadLeft;
+                case "sbnShare": return VGControls.Share;
+                case "sbnL3": return VGControls.L3;
+                case "sbnR3": return VGControls.R3;
+                case "sbnOptions": return VGControls.Options;
+                case "sbnUp": return VGControls.DpadUp;
+                case "sbnRight": return VGControls.DpadRight;
+                case "sbnDown": return VGControls.DpadDown;
+                case "sbnLeft": return VGControls.DpadLeft;
 
-                case "sbnL1": return DS4Controls.L1;
-                case "sbnR1": return DS4Controls.R1;
-                case "sbnTriangle": return DS4Controls.Triangle;
-                case "sbnCircle": return DS4Controls.Circle;
-                case "sbnCross": return DS4Controls.Cross;
-                case "sbnSquare": return DS4Controls.Square;
+                case "sbnL1": return VGControls.L1;
+                case "sbnR1": return VGControls.R1;
+                case "sbnTriangle": return VGControls.Triangle;
+                case "sbnCircle": return VGControls.Circle;
+                case "sbnCross": return VGControls.Cross;
+                case "sbnSquare": return VGControls.Square;
 
-                case "sbnPS": return DS4Controls.PS;
-                case "sbnLSLeft": return DS4Controls.LXNeg;
-                case "sbnLSUp": return DS4Controls.LYNeg;
-                case "sbnRSLeft": return DS4Controls.RXNeg;
-                case "sbnRSUp": return DS4Controls.RYNeg;
+                case "sbnPS": return VGControls.PS;
+                case "sbnLSLeft": return VGControls.LXNeg;
+                case "sbnLSUp": return VGControls.LYNeg;
+                case "sbnRSLeft": return VGControls.RXNeg;
+                case "sbnRSUp": return VGControls.RYNeg;
 
-                case "sbnLSRight": return DS4Controls.LXPos;
-                case "sbnLSDown": return DS4Controls.LYPos;
-                case "sbnRSRight": return DS4Controls.RXPos;
-                case "sbnRSDown": return DS4Controls.RYPos;
-                case "sbnL2": return DS4Controls.L2;
-                case "sbnR2": return DS4Controls.R2;
+                case "sbnLSRight": return VGControls.LXPos;
+                case "sbnLSDown": return VGControls.LYPos;
+                case "sbnRSRight": return VGControls.RXPos;
+                case "sbnRSDown": return VGControls.RYPos;
+                case "sbnL2": return VGControls.L2;
+                case "sbnR2": return VGControls.R2;
 
-                case "sbnTouchLeft": return DS4Controls.TouchLeft;
-                case "sbnTouchMulti": return DS4Controls.TouchMulti;
-                case "sbnTouchUpper": return DS4Controls.TouchUpper;
-                case "sbnTouchRight": return DS4Controls.TouchRight;
-                case "sbnGsyroXP": return DS4Controls.GyroXPos;
-                case "sbnGyroXN": return DS4Controls.GyroXNeg;
-                case "sbnGyroZP": return DS4Controls.GyroZPos;
-                case "sbnGyroZN": return DS4Controls.GyroZNeg;
+                case "sbnTouchLeft": return VGControls.TouchLeft;
+                case "sbnTouchMulti": return VGControls.TouchMulti;
+                case "sbnTouchUpper": return VGControls.TouchUpper;
+                case "sbnTouchRight": return VGControls.TouchRight;
+                case "sbnGsyroXP": return VGControls.GyroXPos;
+                case "sbnGyroXN": return VGControls.GyroXNeg;
+                case "sbnGyroZP": return VGControls.GyroZPos;
+                case "sbnGyroZN": return VGControls.GyroZNeg;
                 #endregion
 
-                case "bnShiftShare": return DS4Controls.Share;
-                case "bnShiftL3": return DS4Controls.L3;
-                case "bnShiftR3": return DS4Controls.R3;
-                case "bnShiftOptions": return DS4Controls.Options;
-                case "bnShiftUp": return DS4Controls.DpadUp;
-                case "bnShiftRight": return DS4Controls.DpadRight;
-                case "bnShiftDown": return DS4Controls.DpadDown;
-                case "bnShiftLeft": return DS4Controls.DpadLeft;
+                case "bnShiftShare": return VGControls.Share;
+                case "bnShiftL3": return VGControls.L3;
+                case "bnShiftR3": return VGControls.R3;
+                case "bnShiftOptions": return VGControls.Options;
+                case "bnShiftUp": return VGControls.DpadUp;
+                case "bnShiftRight": return VGControls.DpadRight;
+                case "bnShiftDown": return VGControls.DpadDown;
+                case "bnShiftLeft": return VGControls.DpadLeft;
 
-                case "bnShiftL1": return DS4Controls.L1;
-                case "bnShiftR1": return DS4Controls.R1;
-                case "bnShiftTriangle": return DS4Controls.Triangle;
-                case "bnShiftCircle": return DS4Controls.Circle;
-                case "bnShiftCross": return DS4Controls.Cross;
-                case "bnShiftSquare": return DS4Controls.Square;
+                case "bnShiftL1": return VGControls.L1;
+                case "bnShiftR1": return VGControls.R1;
+                case "bnShiftTriangle": return VGControls.Triangle;
+                case "bnShiftCircle": return VGControls.Circle;
+                case "bnShiftCross": return VGControls.Cross;
+                case "bnShiftSquare": return VGControls.Square;
 
-                case "bnShiftPS": return DS4Controls.PS;
-                case "bnShiftLSLeft": return DS4Controls.LXNeg;
-                case "bnShiftLSUp": return DS4Controls.LYNeg;
-                case "bnShiftRSLeft": return DS4Controls.RXNeg;
-                case "bnShiftRSUp": return DS4Controls.RYNeg;
+                case "bnShiftPS": return VGControls.PS;
+                case "bnShiftLSLeft": return VGControls.LXNeg;
+                case "bnShiftLSUp": return VGControls.LYNeg;
+                case "bnShiftRSLeft": return VGControls.RXNeg;
+                case "bnShiftRSUp": return VGControls.RYNeg;
 
-                case "bnShiftLSRight": return DS4Controls.LXPos;
-                case "bnShiftLSDown": return DS4Controls.LYPos;
-                case "bnShiftRSRight": return DS4Controls.RXPos;
-                case "bnShiftRSDown": return DS4Controls.RYPos;
-                case "bnShiftL2": return DS4Controls.L2;
-                case "bnShiftR2": return DS4Controls.R2;
+                case "bnShiftLSRight": return VGControls.LXPos;
+                case "bnShiftLSDown": return VGControls.LYPos;
+                case "bnShiftRSRight": return VGControls.RXPos;
+                case "bnShiftRSDown": return VGControls.RYPos;
+                case "bnShiftL2": return VGControls.L2;
+                case "bnShiftR2": return VGControls.R2;
 
-                case "bnShiftTouchLeft": return DS4Controls.TouchLeft;
-                case "bnShiftTouchMulti": return DS4Controls.TouchMulti;
-                case "bnShiftTouchUpper": return DS4Controls.TouchUpper;
-                case "bnShiftTouchRight": return DS4Controls.TouchRight;
-                case "bnShiftGyroXP": return DS4Controls.GyroXPos;
-                case "bnShiftGyroXN": return DS4Controls.GyroXNeg;
-                case "bnShiftGyroZP": return DS4Controls.GyroZPos;
-                case "bnShiftGyroZN": return DS4Controls.GyroZNeg;
+                case "bnShiftTouchLeft": return VGControls.TouchLeft;
+                case "bnShiftTouchMulti": return VGControls.TouchMulti;
+                case "bnShiftTouchUpper": return VGControls.TouchUpper;
+                case "bnShiftTouchRight": return VGControls.TouchRight;
+                case "bnShiftGyroXP": return VGControls.GyroXPos;
+                case "bnShiftGyroXN": return VGControls.GyroXNeg;
+                case "bnShiftGyroZP": return VGControls.GyroZPos;
+                case "bnShiftGyroZN": return VGControls.GyroZNeg;
 
-                case "bnShiftSwipeUp": return DS4Controls.SwipeUp;
-                case "bnShiftSwipeDown": return DS4Controls.SwipeDown;
-                case "bnShiftSwipeLeft": return DS4Controls.SwipeLeft;
-                case "bnShiftSwipeRight": return DS4Controls.SwipeRight;
+                case "bnShiftSwipeUp": return VGControls.SwipeUp;
+                case "bnShiftSwipeDown": return VGControls.SwipeDown;
+                case "bnShiftSwipeLeft": return VGControls.SwipeLeft;
+                case "bnShiftSwipeRight": return VGControls.SwipeRight;
             }
             return 0;
         }
@@ -1230,16 +1230,16 @@ namespace VirtualGamepad4Windows
         public Boolean LoadProfile(int device, bool launchprogram, ControlService control, string propath = "")
         {
             Boolean Loaded = true;
-            Dictionary<DS4Controls, DS4KeyType> customMapKeyTypes = new Dictionary<DS4Controls, DS4KeyType>();
-            Dictionary<DS4Controls, UInt16> customMapKeys = new Dictionary<DS4Controls, UInt16>();
-            Dictionary<DS4Controls, X360Controls> customMapButtons = new Dictionary<DS4Controls, X360Controls>();
-            Dictionary<DS4Controls, String> customMapMacros = new Dictionary<DS4Controls, String>();
-            Dictionary<DS4Controls, String> customMapExtras = new Dictionary<DS4Controls, String>();
-            Dictionary<DS4Controls, DS4KeyType> shiftCustomMapKeyTypes = new Dictionary<DS4Controls, DS4KeyType>();
-            Dictionary<DS4Controls, UInt16> shiftCustomMapKeys = new Dictionary<DS4Controls, UInt16>();
-            Dictionary<DS4Controls, X360Controls> shiftCustomMapButtons = new Dictionary<DS4Controls, X360Controls>();
-            Dictionary<DS4Controls, String> shiftCustomMapMacros = new Dictionary<DS4Controls, String>();
-            Dictionary<DS4Controls, String> shiftCustomMapExtras = new Dictionary<DS4Controls, String>();
+            Dictionary<VGControls, VGKeyType> customMapKeyTypes = new Dictionary<VGControls, VGKeyType>();
+            Dictionary<VGControls, UInt16> customMapKeys = new Dictionary<VGControls, UInt16>();
+            Dictionary<VGControls, X360Controls> customMapButtons = new Dictionary<VGControls, X360Controls>();
+            Dictionary<VGControls, String> customMapMacros = new Dictionary<VGControls, String>();
+            Dictionary<VGControls, String> customMapExtras = new Dictionary<VGControls, String>();
+            Dictionary<VGControls, VGKeyType> shiftCustomMapKeyTypes = new Dictionary<VGControls, VGKeyType>();
+            Dictionary<VGControls, UInt16> shiftCustomMapKeys = new Dictionary<VGControls, UInt16>();
+            Dictionary<VGControls, X360Controls> shiftCustomMapButtons = new Dictionary<VGControls, X360Controls>();
+            Dictionary<VGControls, String> shiftCustomMapMacros = new Dictionary<VGControls, String>();
+            Dictionary<VGControls, String> shiftCustomMapExtras = new Dictionary<VGControls, String>();
             string rootname = "DS4Windows";
             Boolean missingSetting = false;
             string profilepath;
@@ -1476,7 +1476,7 @@ namespace VirtualGamepad4Windows
                 foreach (DS4ControlSettings dcs in ds4settings[device])
                     dcs.Reset();
 
-                DS4KeyType keyType;
+                VGKeyType keyType;
                 ushort wvk;
 
                 {
@@ -1484,7 +1484,7 @@ namespace VirtualGamepad4Windows
                     if (ParentItem != null)
                         foreach (XmlNode item in ParentItem.ChildNodes)
                         {
-                            UpdateDS4CSetting(device, item.Name, false, getX360ControlsByName(item.InnerText), "", DS4KeyType.None, 0);
+                            UpdateDS4CSetting(device, item.Name, false, getX360ControlsByName(item.InnerText), "", VGKeyType.None, 0);
                             customMapButtons.Add(getDS4ControlsByName(item.Name), getX360ControlsByName(item.InnerText));
                         }
                     ParentItem = m_Xdoc.SelectSingleNode("/" + rootname + "/Control/Macro");
@@ -1506,14 +1506,14 @@ namespace VirtualGamepad4Windows
                             }
                             for (int i = 0; i < keys.Length; i++)
                                 keys[i] = int.Parse(skeys[i]);
-                            UpdateDS4CSetting(device, item.Name, false, keys, "", DS4KeyType.None, 0);
+                            UpdateDS4CSetting(device, item.Name, false, keys, "", VGKeyType.None, 0);
                         }
                     ParentItem = m_Xdoc.SelectSingleNode("/" + rootname + "/Control/Key");
                     if (ParentItem != null)
                         foreach (XmlNode item in ParentItem.ChildNodes)
                             if (ushort.TryParse(item.InnerText, out wvk))
                             {
-                                UpdateDS4CSetting(device, item.Name, false, wvk, "", DS4KeyType.None, 0);
+                                UpdateDS4CSetting(device, item.Name, false, wvk, "", VGKeyType.None, 0);
                                 customMapKeys.Add(getDS4ControlsByName(item.Name), wvk);
                             }
                     ParentItem = m_Xdoc.SelectSingleNode("/" + rootname + "/Control/Extras");
@@ -1531,18 +1531,18 @@ namespace VirtualGamepad4Windows
                         foreach (XmlNode item in ParentItem.ChildNodes)
                             if (item != null)
                             {
-                                keyType = DS4KeyType.None;
-                                if (item.InnerText.Contains(DS4KeyType.ScanCode.ToString()))
-                                    keyType |= DS4KeyType.ScanCode;
-                                if (item.InnerText.Contains(DS4KeyType.Toggle.ToString()))
-                                    keyType |= DS4KeyType.Toggle;
-                                if (item.InnerText.Contains(DS4KeyType.Macro.ToString()))
-                                    keyType |= DS4KeyType.Macro;
-                                if (item.InnerText.Contains(DS4KeyType.HoldMacro.ToString()))
-                                    keyType |= DS4KeyType.HoldMacro;
-                                if (item.InnerText.Contains(DS4KeyType.Unbound.ToString()))
-                                    keyType |= DS4KeyType.Unbound;
-                                if (keyType != DS4KeyType.None)
+                                keyType = VGKeyType.None;
+                                if (item.InnerText.Contains(VGKeyType.ScanCode.ToString()))
+                                    keyType |= VGKeyType.ScanCode;
+                                if (item.InnerText.Contains(VGKeyType.Toggle.ToString()))
+                                    keyType |= VGKeyType.Toggle;
+                                if (item.InnerText.Contains(VGKeyType.Macro.ToString()))
+                                    keyType |= VGKeyType.Macro;
+                                if (item.InnerText.Contains(VGKeyType.HoldMacro.ToString()))
+                                    keyType |= VGKeyType.HoldMacro;
+                                if (item.InnerText.Contains(VGKeyType.Unbound.ToString()))
+                                    keyType |= VGKeyType.Unbound;
+                                if (keyType != VGKeyType.None)
                                 {
                                     UpdateDS4CKeyType(device, item.Name, false, keyType);
                                     customMapKeyTypes.Add(getDS4ControlsByName(item.Name), keyType);
@@ -1556,7 +1556,7 @@ namespace VirtualGamepad4Windows
                             int shiftT = shiftM;
                             if (item.HasAttribute("Trigger"))
                                 int.TryParse(item.Attributes["Trigger"].Value, out shiftT);
-                            UpdateDS4CSetting(device, item.Name, true, getX360ControlsByName(item.InnerText), "", DS4KeyType.None, shiftT);
+                            UpdateDS4CSetting(device, item.Name, true, getX360ControlsByName(item.InnerText), "", VGKeyType.None, shiftT);
                             shiftCustomMapButtons.Add(getDS4ControlsByName(item.Name), getX360ControlsByName(item.InnerText));
                         }
                     ParentItem = m_Xdoc.SelectSingleNode("/" + rootname + "/ShiftControl/Macro");
@@ -1581,7 +1581,7 @@ namespace VirtualGamepad4Windows
                             int shiftT = shiftM;
                             if (item.HasAttribute("Trigger"))
                                 int.TryParse(item.Attributes["Trigger"].Value, out shiftT);
-                            UpdateDS4CSetting(device, item.Name, true, keys, "", DS4KeyType.None, shiftT);
+                            UpdateDS4CSetting(device, item.Name, true, keys, "", VGKeyType.None, shiftT);
                         }
                     ParentItem = m_Xdoc.SelectSingleNode("/" + rootname + "/ShiftControl/Key");
                     if (ParentItem != null)
@@ -1591,7 +1591,7 @@ namespace VirtualGamepad4Windows
                                 int shiftT = shiftM;
                                 if (item.HasAttribute("Trigger"))
                                     int.TryParse(item.Attributes["Trigger"].Value, out shiftT);
-                                UpdateDS4CSetting(device, item.Name, true, wvk, "", DS4KeyType.None, shiftT);
+                                UpdateDS4CSetting(device, item.Name, true, wvk, "", VGKeyType.None, shiftT);
                                 shiftCustomMapKeys.Add(getDS4ControlsByName(item.Name), wvk);
                             }
                     ParentItem = m_Xdoc.SelectSingleNode("/" + rootname + "/ShiftControl/Extras");
@@ -1609,18 +1609,18 @@ namespace VirtualGamepad4Windows
                         foreach (XmlElement item in ParentItem.ChildNodes)
                             if (item != null)
                             {
-                                keyType = DS4KeyType.None;
-                                if (item.InnerText.Contains(DS4KeyType.ScanCode.ToString()))
-                                    keyType |= DS4KeyType.ScanCode;
-                                if (item.InnerText.Contains(DS4KeyType.Toggle.ToString()))
-                                    keyType |= DS4KeyType.Toggle;
-                                if (item.InnerText.Contains(DS4KeyType.Macro.ToString()))
-                                    keyType |= DS4KeyType.Macro;
-                                if (item.InnerText.Contains(DS4KeyType.HoldMacro.ToString()))
-                                    keyType |= DS4KeyType.HoldMacro;
-                                if (item.InnerText.Contains(DS4KeyType.Unbound.ToString()))
-                                    keyType |= DS4KeyType.Unbound;
-                                if (keyType != DS4KeyType.None)
+                                keyType = VGKeyType.None;
+                                if (item.InnerText.Contains(VGKeyType.ScanCode.ToString()))
+                                    keyType |= VGKeyType.ScanCode;
+                                if (item.InnerText.Contains(VGKeyType.Toggle.ToString()))
+                                    keyType |= VGKeyType.Toggle;
+                                if (item.InnerText.Contains(VGKeyType.Macro.ToString()))
+                                    keyType |= VGKeyType.Macro;
+                                if (item.InnerText.Contains(VGKeyType.HoldMacro.ToString()))
+                                    keyType |= VGKeyType.HoldMacro;
+                                if (item.InnerText.Contains(VGKeyType.Unbound.ToString()))
+                                    keyType |= VGKeyType.Unbound;
+                                if (keyType != VGKeyType.None)
                                 {
                                     UpdateDS4CKeyType(device, item.Name, true, keyType);
                                     shiftCustomMapKeyTypes.Add(getDS4ControlsByName(item.Name), keyType);
@@ -1652,11 +1652,11 @@ namespace VirtualGamepad4Windows
             return Loaded;
         }
 
-        public void LoadButtons(System.Windows.Forms.Control[] buttons, string control, Dictionary<DS4Controls, DS4KeyType> customMapKeyTypes,
-           Dictionary<DS4Controls, UInt16> customMapKeys, Dictionary<DS4Controls, X360Controls> customMapButtons, Dictionary<DS4Controls, String> customMapMacros, Dictionary<DS4Controls, String> customMapExtras)
+        public void LoadButtons(System.Windows.Forms.Control[] buttons, string control, Dictionary<VGControls, VGKeyType> customMapKeyTypes,
+           Dictionary<VGControls, UInt16> customMapKeys, Dictionary<VGControls, X360Controls> customMapButtons, Dictionary<VGControls, String> customMapMacros, Dictionary<VGControls, String> customMapExtras)
         {
             XmlNode Item;
-            DS4KeyType keyType;
+            VGKeyType keyType;
             UInt16 wvk;
             string rootname = "DS4Windows";
             foreach (var button in buttons)
@@ -1672,30 +1672,30 @@ namespace VirtualGamepad4Windows
                     if (Item != null)
                     {
                         //foundBinding = true;
-                        keyType = DS4KeyType.None;
-                        if (Item.InnerText.Contains(DS4KeyType.Unbound.ToString()))
+                        keyType = VGKeyType.None;
+                        if (Item.InnerText.Contains(VGKeyType.Unbound.ToString()))
                         {
-                            keyType = DS4KeyType.Unbound;
+                            keyType = VGKeyType.Unbound;
                             button.Tag = "Unbound";
                             button.Text = "Unbound";
                         }
                         else
                         {
-                            bool SC = Item.InnerText.Contains(DS4KeyType.ScanCode.ToString());
-                            bool TG = Item.InnerText.Contains(DS4KeyType.Toggle.ToString());
-                            bool MC = Item.InnerText.Contains(DS4KeyType.Macro.ToString());
-                            bool MR = Item.InnerText.Contains(DS4KeyType.HoldMacro.ToString());
+                            bool SC = Item.InnerText.Contains(VGKeyType.ScanCode.ToString());
+                            bool TG = Item.InnerText.Contains(VGKeyType.Toggle.ToString());
+                            bool MC = Item.InnerText.Contains(VGKeyType.Macro.ToString());
+                            bool MR = Item.InnerText.Contains(VGKeyType.HoldMacro.ToString());
                             button.Font = new Font(button.Font,
                                 (SC ? FontStyle.Bold : FontStyle.Regular) | (TG ? FontStyle.Italic : FontStyle.Regular) |
                                 (MC ? FontStyle.Underline : FontStyle.Regular) | (MR ? FontStyle.Strikeout : FontStyle.Regular));
-                            if (Item.InnerText.Contains(DS4KeyType.ScanCode.ToString()))
-                                keyType |= DS4KeyType.ScanCode;
-                            if (Item.InnerText.Contains(DS4KeyType.Toggle.ToString()))
-                                keyType |= DS4KeyType.Toggle;
-                            if (Item.InnerText.Contains(DS4KeyType.Macro.ToString()))
-                                keyType |= DS4KeyType.Macro;
+                            if (Item.InnerText.Contains(VGKeyType.ScanCode.ToString()))
+                                keyType |= VGKeyType.ScanCode;
+                            if (Item.InnerText.Contains(VGKeyType.Toggle.ToString()))
+                                keyType |= VGKeyType.Toggle;
+                            if (Item.InnerText.Contains(VGKeyType.Macro.ToString()))
+                                keyType |= VGKeyType.Macro;
                         }
-                        if (keyType != DS4KeyType.None)
+                        if (keyType != VGKeyType.None)
                             customMapKeyTypes.Add(getDS4ControlsByName(Item.Name), keyType);
                     }
                     string extras;
@@ -2103,13 +2103,13 @@ namespace VirtualGamepad4Windows
         }
 
 
-        public void UpdateDS4CSetting(int deviceNum, string buttonName, bool shift, object action, string exts, DS4KeyType kt, int trigger = 0)
+        public void UpdateDS4CSetting(int deviceNum, string buttonName, bool shift, object action, string exts, VGKeyType kt, int trigger = 0)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                 {
@@ -2120,11 +2120,11 @@ namespace VirtualGamepad4Windows
 
         public void UpdateDS4CExtra(int deviceNum, string buttonName, bool shift, string exts)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                 {
@@ -2136,13 +2136,13 @@ namespace VirtualGamepad4Windows
                 }
         }
 
-        private void UpdateDS4CKeyType(int deviceNum, string buttonName, bool shift, DS4KeyType keyType)
+        private void UpdateDS4CKeyType(int deviceNum, string buttonName, bool shift, VGKeyType keyType)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                 {
@@ -2156,11 +2156,11 @@ namespace VirtualGamepad4Windows
 
         public object GetDS4Action(int deviceNum, string buttonName, bool shift)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                 {
@@ -2174,11 +2174,11 @@ namespace VirtualGamepad4Windows
 
         public string GetDS4Extra(int deviceNum, string buttonName, bool shift)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                 {
@@ -2190,13 +2190,13 @@ namespace VirtualGamepad4Windows
             return null;
         }
 
-        public DS4KeyType GetDS4KeyType(int deviceNum, string buttonName, bool shift)
+        public VGKeyType GetDS4KeyType(int deviceNum, string buttonName, bool shift)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                 {
@@ -2205,16 +2205,16 @@ namespace VirtualGamepad4Windows
                     else
                         return dcs.keyType;
                 }
-            return DS4KeyType.None;
+            return VGKeyType.None;
         }
 
         public int GetDS4STrigger(int deviceNum, string buttonName)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                     return dcs.shiftTrigger;
@@ -2223,11 +2223,11 @@ namespace VirtualGamepad4Windows
 
         public DS4ControlSettings getDS4CSetting(int deviceNum, string buttonName)
         {
-            DS4Controls dc;
+            VGControls dc;
             if (buttonName.StartsWith("bn"))
                 dc = getDS4ControlsByName(buttonName);
             else
-                dc = (DS4Controls)Enum.Parse(typeof(DS4Controls), buttonName, true);
+                dc = (VGControls)Enum.Parse(typeof(VGControls), buttonName, true);
             foreach (DS4ControlSettings dcs in ds4settings[deviceNum])
                 if (dcs.control == dc)
                     return dcs;
@@ -2255,17 +2255,17 @@ namespace VirtualGamepad4Windows
     public class SpecialAction
     {
         public string name;
-        public List<DS4Controls> trigger = new List<DS4Controls>();
+        public List<VGControls> trigger = new List<VGControls>();
         public string type;
         public string controls;
         public List<int> macro = new List<int>();
         public string details;
-        public List<DS4Controls> uTrigger = new List<DS4Controls>();
+        public List<VGControls> uTrigger = new List<VGControls>();
         public string ucontrols;
         public double delayTime = 0;
         public string extra;
         public bool pressRelease = false;
-        public DS4KeyType keyType;
+        public VGKeyType keyType;
         public SpecialAction(string name, string controls, string type, string details, double delay = 0, string extras = "")
         {
             this.name = name;
@@ -2285,7 +2285,7 @@ namespace VirtualGamepad4Windows
                         macro.Add(v);
                 }
                 if (extras.Contains("Scan Code"))
-                    keyType |= DS4KeyType.ScanCode;
+                    keyType |= VGKeyType.ScanCode;
             }
             else if (type == "Key")
             {
@@ -2300,7 +2300,7 @@ namespace VirtualGamepad4Windows
                         uTrigger.Add(getDS4ControlsByName(s));
                 }
                 if (details.Contains("Scan Code"))
-                    keyType |= DS4KeyType.ScanCode;
+                    keyType |= VGKeyType.ScanCode;
             }
             else if (type == "Program")
             {
@@ -2344,53 +2344,53 @@ namespace VirtualGamepad4Windows
             }
         }
 
-        private DS4Controls getDS4ControlsByName(string key)
+        private VGControls getDS4ControlsByName(string key)
         {
             switch (key)
             {
-                case "Share": return DS4Controls.Share;
-                case "L3": return DS4Controls.L3;
-                case "R3": return DS4Controls.R3;
-                case "Options": return DS4Controls.Options;
-                case "Up": return DS4Controls.DpadUp;
-                case "Right": return DS4Controls.DpadRight;
-                case "Down": return DS4Controls.DpadDown;
-                case "Left": return DS4Controls.DpadLeft;
+                case "Share": return VGControls.Share;
+                case "L3": return VGControls.L3;
+                case "R3": return VGControls.R3;
+                case "Options": return VGControls.Options;
+                case "Up": return VGControls.DpadUp;
+                case "Right": return VGControls.DpadRight;
+                case "Down": return VGControls.DpadDown;
+                case "Left": return VGControls.DpadLeft;
 
-                case "L1": return DS4Controls.L1;
-                case "R1": return DS4Controls.R1;
-                case "Triangle": return DS4Controls.Triangle;
-                case "Circle": return DS4Controls.Circle;
-                case "Cross": return DS4Controls.Cross;
-                case "Square": return DS4Controls.Square;
+                case "L1": return VGControls.L1;
+                case "R1": return VGControls.R1;
+                case "Triangle": return VGControls.Triangle;
+                case "Circle": return VGControls.Circle;
+                case "Cross": return VGControls.Cross;
+                case "Square": return VGControls.Square;
 
-                case "PS": return DS4Controls.PS;
-                case "Left Stick Left": return DS4Controls.LXNeg;
-                case "Left Stick Up": return DS4Controls.LYNeg;
-                case "Right Stick Left": return DS4Controls.RXNeg;
-                case "Right Stick Up": return DS4Controls.RYNeg;
+                case "PS": return VGControls.PS;
+                case "Left Stick Left": return VGControls.LXNeg;
+                case "Left Stick Up": return VGControls.LYNeg;
+                case "Right Stick Left": return VGControls.RXNeg;
+                case "Right Stick Up": return VGControls.RYNeg;
 
-                case "Left Stick Right": return DS4Controls.LXPos;
-                case "Left Stick Down": return DS4Controls.LYPos;
-                case "Right Stick Right": return DS4Controls.RXPos;
-                case "Right Stick Down": return DS4Controls.RYPos;
-                case "L2": return DS4Controls.L2;
-                case "R2": return DS4Controls.R2;
+                case "Left Stick Right": return VGControls.LXPos;
+                case "Left Stick Down": return VGControls.LYPos;
+                case "Right Stick Right": return VGControls.RXPos;
+                case "Right Stick Down": return VGControls.RYPos;
+                case "L2": return VGControls.L2;
+                case "R2": return VGControls.R2;
 
-                case "Left Touch": return DS4Controls.TouchLeft;
-                case "Multitouch": return DS4Controls.TouchMulti;
-                case "Upper Touch": return DS4Controls.TouchUpper;
-                case "Right Touch": return DS4Controls.TouchRight;
+                case "Left Touch": return VGControls.TouchLeft;
+                case "Multitouch": return VGControls.TouchMulti;
+                case "Upper Touch": return VGControls.TouchUpper;
+                case "Right Touch": return VGControls.TouchRight;
 
-                case "Swipe Up": return DS4Controls.SwipeUp;
-                case "Swipe Down": return DS4Controls.SwipeDown;
-                case "Swipe Left": return DS4Controls.SwipeLeft;
-                case "Swipe Right": return DS4Controls.SwipeRight;
+                case "Swipe Up": return VGControls.SwipeUp;
+                case "Swipe Down": return VGControls.SwipeDown;
+                case "Swipe Left": return VGControls.SwipeLeft;
+                case "Swipe Right": return VGControls.SwipeRight;
 
-                case "Tilt Up": return DS4Controls.GyroZNeg;
-                case "Tilt Down": return DS4Controls.GyroZPos;
-                case "Tilt Left": return DS4Controls.GyroXPos;
-                case "Tilt Right": return DS4Controls.GyroXNeg;
+                case "Tilt Up": return VGControls.GyroZNeg;
+                case "Tilt Down": return VGControls.GyroZPos;
+                case "Tilt Left": return VGControls.GyroXPos;
+                case "Tilt Right": return VGControls.GyroXNeg;
             }
             return 0;
         }
