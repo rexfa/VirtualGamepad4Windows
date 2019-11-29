@@ -527,45 +527,45 @@ namespace VirtualGamepad4Windows
         public double[] rainbow = { 0, 0, 0, 0, 0 };
         public int[] flashAt = { 0, 0, 0, 0, 0 };
         public bool[] mouseAccel = { true, true, true, true, true };
-        public DS4Color[] m_LowLeds = new DS4Color[]
+        public VGColor[] m_LowLeds = new VGColor[]
         {
-             new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black)
+             new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black)
         };
-        public DS4Color[] m_Leds = new DS4Color[]
+        public VGColor[] m_Leds = new DS4Color[]
         {
-            new DS4Color(Color.Blue),
-            new DS4Color(Color.Red),
-            new DS4Color(Color.Green),
-            new DS4Color(Color.Pink),
-            new DS4Color(Color.White)
+            new VGColor(Color.Blue),
+            new VGColor(Color.Red),
+            new VGColor(Color.Green),
+            new VGColor(Color.Pink),
+            new VGColor(Color.White)
         };
-        public DS4Color[] m_ChargingLeds = new DS4Color[]
+        public VGColor[] m_ChargingLeds = new VGColor[]
         {
-             new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black)
+             new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black)
         };
-        public DS4Color[] m_FlashLeds = new DS4Color[]
+        public VGColor[] m_FlashLeds = new VGColor[]
         {
-             new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black)
+             new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black)
         };
         public bool[] useCustomLeds = new bool[] { false, false, false, false };
-        public DS4Color[] m_CustomLeds = new DS4Color[]
+        public VGColor[] m_CustomLeds = new VGColor[]
         {
-             new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black),
-            new DS4Color(Color.Black)
+             new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black),
+            new VGColor(Color.Black)
         };
         public int[] chargingType = { 0, 0, 0, 0, 0 };
         public string[] launchProgram = { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
@@ -1259,8 +1259,8 @@ namespace VirtualGamepad4Windows
                 }
                 if (device < 4)
                 {
-                    DS4LightBar.forcelight[device] = false;
-                    DS4LightBar.forcedFlash[device] = 0;
+                    VGLightBar.forcelight[device] = false;
+                    VGLightBar.forcedFlash[device] = 0;
                 }
                 try { Item = m_Xdoc.SelectSingleNode("/" + rootname + "/flushHIDQueue"); Boolean.TryParse(Item.InnerText, out flushHIDQueue[device]); }
                 catch { missingSetting = true; }//rootname = }

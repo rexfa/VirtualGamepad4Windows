@@ -18,7 +18,7 @@ using System.Drawing;
 namespace VirtualGamepad4Windows
 {
     public enum ConnectionType : byte { BT, USB };
-    public struct VG4Color
+    public struct VGColor
     {
         public byte red;
         public byte green;
@@ -120,7 +120,7 @@ namespace VirtualGamepad4Windows
         private byte[] inputReport;
         private byte[] btInputReport = null;
         private byte[] outputReportBuffer, outputReport;
-        private readonly DS4Touchpad touchpad = null;
+        private readonly VGTouchpad touchpad = null;
         private readonly DS4SixAxis sixAxis = null;
         private byte rightLightFastRumble;
         private byte leftHeavySlowRumble;
@@ -202,7 +202,7 @@ namespace VirtualGamepad4Windows
             }
         }
 
-        public DS4Touchpad Touchpad { get { return touchpad; } }
+        public VGTouchpad Touchpad { get { return touchpad; } }
         public DS4SixAxis SixAxis { get { return sixAxis; } }
 
         public static ConnectionType HidConnectionType(HidDevice hidDevice)
@@ -228,7 +228,7 @@ namespace VirtualGamepad4Windows
                 outputReport = new byte[BT_OUTPUT_REPORT_LENGTH];
                 outputReportBuffer = new byte[BT_OUTPUT_REPORT_LENGTH];
             }
-            touchpad = new DS4Touchpad();
+            touchpad = new VGTouchpad();
             sixAxis = new DS4SixAxis();
         }
 
@@ -477,15 +477,15 @@ namespace VirtualGamepad4Windows
                 // XXX DS4State mapping needs fixup, turn touches into an array[4] of structs.  And include the touchpad details there instead.
                 try
                 {
-                    for (int touches = inputReport[-1 + DS4Touchpad.TOUCHPAD_DATA_OFFSET - 1], touchOffset = 0; touches > 0; touches--, touchOffset += 9)
+                    for (int touches = inputReport[-1 + VGTouchpad.TOUCHPAD_DATA_OFFSET - 1], touchOffset = 0; touches > 0; touches--, touchOffset += 9)
                     {
-                        cState.TouchPacketCounter = inputReport[-1 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset];
-                        cState.Touch1 = (inputReport[0 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] >> 7) != 0 ? false : true; // >= 1 touch detected
-                        cState.Touch1Identifier = (byte)(inputReport[0 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0x7f);
-                        cState.Touch2 = (inputReport[4 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] >> 7) != 0 ? false : true; // 2 touches detected
-                        cState.Touch2Identifier = (byte)(inputReport[4 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0x7f);
-                        cState.TouchLeft = (inputReport[1 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] + ((inputReport[2 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0xF) * 255) >= 1920 * 2 / 5) ? false : true;
-                        cState.TouchRight = (inputReport[1 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] + ((inputReport[2 + DS4Touchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0xF) * 255) < 1920 * 2 / 5) ? false : true;
+                        cState.TouchPacketCounter = inputReport[-1 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset];
+                        cState.Touch1 = (inputReport[0 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] >> 7) != 0 ? false : true; // >= 1 touch detected
+                        cState.Touch1Identifier = (byte)(inputReport[0 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0x7f);
+                        cState.Touch2 = (inputReport[4 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] >> 7) != 0 ? false : true; // 2 touches detected
+                        cState.Touch2Identifier = (byte)(inputReport[4 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0x7f);
+                        cState.TouchLeft = (inputReport[1 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] + ((inputReport[2 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0xF) * 255) >= 1920 * 2 / 5) ? false : true;
+                        cState.TouchRight = (inputReport[1 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] + ((inputReport[2 + VGTouchpad.TOUCHPAD_DATA_OFFSET + touchOffset] & 0xF) * 255) < 1920 * 2 / 5) ? false : true;
                         // Even when idling there is still a touch packet indicating no touch 1 or 2
                         touchpad.handleTouchpad(inputReport, cState, touchOffset);
                     }
@@ -669,7 +669,7 @@ namespace VirtualGamepad4Windows
             return pState.Clone();
         }
 
-        public void getExposedState(DS4StateExposed expState, VGState state)
+        public void getExposedState(VGStateExposed expState, VGState state)
         {
             cState.CopyTo(state);
             expState.Accel = accel;

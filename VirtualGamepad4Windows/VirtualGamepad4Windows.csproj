@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="VGControl\CommandService.cs" />
     <Compile Include="VGControl\ControlService.cs" />
+    <Compile Include="VGControl\InputMethods.cs" />
     <Compile Include="VGControl\ITouchpadBehaviour.cs" />
+    <Compile Include="VGControl\Mapping.cs" />
     <Compile Include="VGControl\Mouse.cs" />
     <Compile Include="VGControl\MouseCursor.cs" />
     <Compile Include="VGControl\MouseWheel.cs" />
@@ -55,6 +57,7 @@
       <DependentUpon>ScpDevice.cs</DependentUpon>
     </Compile>
     <Compile Include="VGControl\ScpUtil.cs" />
+    <Compile Include="VGControl\VGLightBar.cs" />
     <Compile Include="VGLibrary\Extensions.cs" />
     <Compile Include="VGLibrary\HidDevice.cs" />
     <Compile Include="VGLibrary\HidDeviceAttributes.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="VGLibrary\VGDevice.cs" />
     <Compile Include="VGLibrary\VGDevicePool.cs" />
     <Compile Include="VGLibrary\VGSixaxis.cs" />
+    <Compile Include="VGLibrary\VGStateExposed.cs" />
     <Compile Include="VGLibrary\VGTouchpad.cs" />
     <Compile Include="VGControl\X360Device.cs">
       <SubType>Component</SubType>
