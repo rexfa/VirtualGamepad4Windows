@@ -837,10 +837,10 @@ namespace VirtualGamepad4Windows
                                 ctrl.setRumble((byte)extras[0], (byte)extras[1], device);
                             if (extras[2] == 1)
                             {
-                                DS4Color color = new DS4Color { red = (byte)extras[3], green = (byte)extras[4], blue = (byte)extras[5] };
-                                DS4LightBar.forcedColor[device] = color;
-                                DS4LightBar.forcedFlash[device] = (byte)extras[6];
-                                DS4LightBar.forcelight[device] = true;
+                                VGColor color = new VGColor { red = (byte)extras[3], green = (byte)extras[4], blue = (byte)extras[5] };
+                                VGLightBar.forcedColor[device] = color;
+                                VGLightBar.forcedFlash[device] = (byte)extras[6];
+                                VGLightBar.forcelight[device] = true;
                             }
                             if (extras[7] == 1)
                             {
@@ -853,8 +853,8 @@ namespace VirtualGamepad4Windows
                     }
                     else if ((regE || shiftE) && held[device])
                     {
-                        DS4LightBar.forcelight[device] = false;
-                        DS4LightBar.forcedFlash[device] = 0;
+                        VGLightBar.forcelight[device] = false;
+                        VGLightBar.forcedFlash[device] = 0;
                         ButtonMouseSensitivity[device] = oldmouse[device];
                         oldmouse[device] = -1;
                         ctrl.setRumble(0, 0, device);
@@ -1216,7 +1216,7 @@ namespace VirtualGamepad4Windows
                         }
                         else if (triggeractivated && action.type == "DisconnectBT")
                         {
-                            DS4Device d = ctrl.DS4Controllers[device];
+                            VGDevice d = ctrl.DS4Controllers[device];
                             if (!d.Charging)
                             {
                                 d.DisconnectBT();
@@ -1250,17 +1250,17 @@ namespace VirtualGamepad4Windows
                             }
                             if (bool.Parse(dets[2]))
                             {
-                                DS4Device d = ctrl.DS4Controllers[device];
+                                VGDevice d = ctrl.DS4Controllers[device];
                                 if (!actionDone[index].dev[device])
                                 {
                                     lastColor[device] = d.LightBarColor;
-                                    DS4LightBar.forcelight[device] = true;
+                                    VGLightBar.forcelight[device] = true;
                                 }
-                                DS4Color empty = new DS4Color(byte.Parse(dets[3]), byte.Parse(dets[4]), byte.Parse(dets[5]));
-                                DS4Color full = new DS4Color(byte.Parse(dets[6]), byte.Parse(dets[7]), byte.Parse(dets[8]));
-                                DS4Color trans = getTransitionedColor(empty, full, d.Battery);
+                                VGColor empty = new VGColor(byte.Parse(dets[3]), byte.Parse(dets[4]), byte.Parse(dets[5]));
+                                VGColor full = new VGColor(byte.Parse(dets[6]), byte.Parse(dets[7]), byte.Parse(dets[8]));
+                                VGColor trans = getTransitionedColor(empty, full, d.Battery);
                                 if (fadetimer[device] < 100)
-                                    DS4LightBar.forcedColor[device] = getTransitionedColor(lastColor[device], trans, fadetimer[device] += 2);
+                                    VGLightBar.forcedColor[device] = getTransitionedColor(lastColor[device], trans, fadetimer[device] += 2);
                             }
                             actionDone[index].dev[device] = true;
                         }
@@ -1276,7 +1276,7 @@ namespace VirtualGamepad4Windows
                                 }
                                 else
                                     prevFadetimer[device] = fadetimer[device];*/
-                                DS4LightBar.forcelight[device] = false;
+                                VGLightBar.forcelight[device] = false;
                                 actionDone[index].dev[device] = false;
                             }
                         }
@@ -1289,7 +1289,7 @@ namespace VirtualGamepad4Windows
                             if (getCustomKey(device, action.trigger[0]) != 0)
                                 getCustomMacros(device).Remove(action.trigger[0]);*/
                             string[] dets = action.details.Split(',');
-                            DS4Device d = ctrl.DS4Controllers[device];
+                            VGDevice d = ctrl.DS4Controllers[device];
                             //cus
                             if (getBoolMapping(device, action.trigger[0], cState, eState, tp) && !getBoolMapping(device, action.trigger[0], d.getPreviousState(), eState, tp))
                             {//pressed down
@@ -1491,9 +1491,9 @@ namespace VirtualGamepad4Windows
                                 byte r = (byte)(int.Parse(lb[0].ToString()) * 100 + int.Parse(lb[1].ToString()) * 10 + int.Parse(lb[2].ToString()));
                                 byte g = (byte)(int.Parse(lb[3].ToString()) * 100 + int.Parse(lb[4].ToString()) * 10 + int.Parse(lb[5].ToString()));
                                 byte b = (byte)(int.Parse(lb[6].ToString()) * 100 + int.Parse(lb[7].ToString()) * 10 + int.Parse(lb[8].ToString()));
-                                DS4LightBar.forcelight[device] = true;
-                                DS4LightBar.forcedFlash[device] = 0;
-                                DS4LightBar.forcedColor[device] = new DS4Color(r, g, b);
+                                VGLightBar.forcelight[device] = true;
+                                VGLightBar.forcedFlash[device] = 0;
+                                VGLightBar.forcedColor[device] = new VGColor(r, g, b);
                             }
                             else
                             {
@@ -1626,8 +1626,8 @@ namespace VirtualGamepad4Windows
                             else
                                 InputMethods.performKeyRelease(i);
                     }
-                    DS4LightBar.forcedFlash[device] = 0;
-                    DS4LightBar.forcelight[device] = false;
+                    VGLightBar.forcedFlash[device] = 0;
+                    VGLightBar.forcelight[device] = false;
                     Program.rootHub.DS4Controllers[device].setRumble(0, 0);
                     if (keyType.HasFlag(VGKeyType.HoldMacro))
                     {
@@ -1677,7 +1677,7 @@ namespace VirtualGamepad4Windows
             }
         }
 
-        private static void getMouseWheelMapping(int device, VGControls control, DS4State cState, DS4StateExposed eState, Mouse tp, bool down)
+        private static void getMouseWheelMapping(int device, VGControls control, VGState cState, VGStateExposed eState, Mouse tp, bool down)
         {
             DateTime now = DateTime.UtcNow;
             if (now >= oldnow + TimeSpan.FromMilliseconds(10) && !pressagain)
@@ -1687,7 +1687,7 @@ namespace VirtualGamepad4Windows
             }
         }
 
-        private static int getMouseMapping(int device, VGControls control, DS4State cState, DS4StateExposed eState, int mnum)
+        private static int getMouseMapping(int device, VGControls control, VGState cState, VGStateExposed eState, int mnum)
         {
             int controlnum = DS4ControltoInt(control);
             double SXD = SXDeadzone[device];
@@ -1821,7 +1821,7 @@ Math.Pow(root + speed / divide, -eState.GyroZ) : 0);
             return true;
         }
 
-        public static byte getByteMapping(int device, VGControls control, DS4State cState, DS4StateExposed eState, Mouse tp)
+        public static byte getByteMapping(int device, VGControls control, VGState cState, VGStateExposed eState, Mouse tp)
         {
             double SXD = SXDeadzone[device];
             double SZD = SZDeadzone[device];
