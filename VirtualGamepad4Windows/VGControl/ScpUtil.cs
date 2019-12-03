@@ -535,7 +535,7 @@ namespace VirtualGamepad4Windows
             new VGColor(Color.Black),
             new VGColor(Color.Black)
         };
-        public VGColor[] m_Leds = new DS4Color[]
+        public VGColor[] m_Leds = new VGColor[]
         {
             new VGColor(Color.Blue),
             new VGColor(Color.Red),

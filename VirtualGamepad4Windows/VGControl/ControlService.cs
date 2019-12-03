@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Media;
+using static VirtualGamepad4Windows.Global;
 
 namespace VirtualGamepad4Windows
 {
@@ -27,6 +28,10 @@ namespace VirtualGamepad4Windows
         int[] oldmouse = new int[4] { -1, -1, -1, -1 };
         SoundPlayer sp = new SoundPlayer();
 
+        public bool[] touchreleased = { true, true, true, true }, touchslid = { false, false, false, false };
+        public byte[] oldtouchvalue = { 0, 0, 0, 0 };
+        public int[] oldscrollvalue = { 0, 0, 0, 0 };
+
         #region 360 数据
         private class X360Data
         {
@@ -38,7 +43,8 @@ namespace VirtualGamepad4Windows
 
         public ControlService()
         {
-            sp.Stream = Properties.Resources.EE;
+            //声音播放
+            //sp.Stream = Properties.Resources.EE;
             x360Bus = new X360Device();
             AddtoVGList();
             for (int i = 0; i < DS4Controllers.Length; i++)
@@ -100,6 +106,55 @@ namespace VirtualGamepad4Windows
 
             }
             return true;
+        }
+        public virtual void StartTPOff(int deviceID)
+        {
+            if (deviceID < 4)
+            {
+                oldtouchvalue[deviceID] = TouchSensitivity[deviceID];
+                oldscrollvalue[deviceID] = ScrollSensitivity[deviceID];
+                TouchSensitivity[deviceID] = 0;
+                ScrollSensitivity[deviceID] = 0;
+            }
+        }
+        //sets the rumble adjusted with rumble boost
+        public virtual void setRumble(byte heavyMotor, byte lightMotor, int deviceNum)
+        {
+            byte boost = RumbleBoost[deviceNum];
+            uint lightBoosted = ((uint)lightMotor * (uint)boost) / 100;
+            if (lightBoosted > 255)
+                lightBoosted = 255;
+            uint heavyBoosted = ((uint)heavyMotor * (uint)boost) / 100;
+            if (heavyBoosted > 255)
+                heavyBoosted = 255;
+            if (deviceNum < 4)
+                if (DS4Controllers[deviceNum] != null)
+                    DS4Controllers[deviceNum].setRumble((byte)lightBoosted, (byte)heavyBoosted);
+        }
+        public string getDS4Battery(int index)
+        {
+            if (DS4Controllers[index] != null)
+            {
+                VGDevice d = DS4Controllers[index];
+                String battery;
+                if (!d.IsAlive())
+                    battery = "...";
+                if (d.Charging)
+                {
+                    if (d.Battery >= 100)
+                        battery = Properties.Resources.Full;
+                        //battery = "full";
+                    else
+                        battery = d.Battery + "%+";
+                }
+                else
+                {
+                    battery = d.Battery + "%";
+                }
+                return battery;
+            }
+            else
+                return Properties.Resources.NA;
         }
     }
 }

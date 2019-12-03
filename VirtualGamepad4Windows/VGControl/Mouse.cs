@@ -170,22 +170,22 @@ namespace VirtualGamepad4Windows
             synthesizeMouseButtons();
         }
 
-        private DS4State remapped = new DS4State();
+        private VGState remapped = new VGState();
         public bool dragging, dragging2;
         private void synthesizeMouseButtons()
         {
-            if (Global.GetDS4Action(deviceNum, DS4Controls.TouchLeft.ToString(), false) == null && leftDown)
+            if (Global.GetDS4Action(deviceNum, VGControls.TouchLeft.ToString(), false) == null && leftDown)
             {
                 Mapping.MapClick(deviceNum, Mapping.Click.Left);
                 dragging2 = true;
             }
             else
                 dragging2 = false;
-            if (Global.GetDS4Action(deviceNum, DS4Controls.TouchUpper.ToString(), false) == null && upperDown)
+            if (Global.GetDS4Action(deviceNum, VGControls.TouchUpper.ToString(), false) == null && upperDown)
                 Mapping.MapClick(deviceNum, Mapping.Click.Middle);
-            if (Global.GetDS4Action(deviceNum, DS4Controls.TouchRight.ToString(), false) == null && rightDown)
+            if (Global.GetDS4Action(deviceNum, VGControls.TouchRight.ToString(), false) == null && rightDown)
                 Mapping.MapClick(deviceNum, Mapping.Click.Left);
-            if (Global.GetDS4Action(deviceNum, DS4Controls.TouchMulti.ToString(), false) == null && multiDown)
+            if (Global.GetDS4Action(deviceNum, VGControls.TouchMulti.ToString(), false) == null && multiDown)
                 Mapping.MapClick(deviceNum, Mapping.Click.Right);
             if (!Global.UseTPforControls[deviceNum])
             {
@@ -213,7 +213,7 @@ namespace VirtualGamepad4Windows
 
         public virtual void touchButtonUp(object sender, TouchpadEventArgs arg)
         {
-            pushed = DS4Controls.None;
+            pushed = VGControls.None;
             upperDown = leftDown = rightDown = multiDown = false;
             dev.setRumble(0, 0);
             dev.getCurrentState(s);
@@ -240,7 +240,7 @@ namespace VirtualGamepad4Windows
             synthesizeMouseButtons();
         }
 
-        public DS4State getDS4State()
+        public VGState getVGState()
         {
             return s;
         }

@@ -1497,13 +1497,13 @@ namespace VirtualGamepad4Windows
                             }
                             else
                             {
-                                DS4LightBar.forcedFlash[device] = 0;
-                                DS4LightBar.forcelight[device] = false;
+                                VGLightBar.forcedFlash[device] = 0;
+                                VGLightBar.forcelight[device] = false;
                             }
                         }
                         else if (i >= 1000000)
                         {
-                            DS4Device d = Program.rootHub.DS4Controllers[device];
+                            VGDevice d = Program.controlService.DS4Controllers[device];
                             string r = i.ToString().Substring(1);
                             byte heavy = (byte)(int.Parse(r[0].ToString()) * 100 + int.Parse(r[1].ToString()) * 10 + int.Parse(r[2].ToString()));
                             byte light = (byte)(int.Parse(r[3].ToString()) * 100 + int.Parse(r[4].ToString()) * 10 + int.Parse(r[5].ToString()));
@@ -1628,7 +1628,7 @@ namespace VirtualGamepad4Windows
                     }
                     VGLightBar.forcedFlash[device] = 0;
                     VGLightBar.forcelight[device] = false;
-                    Program.rootHub.DS4Controllers[device].setRumble(0, 0);
+                    Program.controlService.DS4Controllers[device].setRumble(0, 0);
                     if (keyType.HasFlag(VGKeyType.HoldMacro))
                     {
                         await Task.Delay(50);
