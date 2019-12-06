@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace VirtualGamepad4Windows
 {
+    //输入方法类
     class InputMethods
     {
         private static INPUT[] sendInputs = new INPUT[2]; // will allow for keyboard + mouse/tablet input within one SendInput call, or two mouse events
