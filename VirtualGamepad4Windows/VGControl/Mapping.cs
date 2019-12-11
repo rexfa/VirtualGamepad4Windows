@@ -583,6 +583,15 @@ namespace VirtualGamepad4Windows
         /// </summary>
         static bool[] held = new bool[4];
         static int[] oldmouse = new int[4] { -1, -1, -1, -1 };
+        /// <summary>
+        /// 设备输入函数 交由ControlService 引用
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="cState"></param>
+        /// <param name="MappedState"></param>
+        /// <param name="eState"></param>
+        /// <param name="tp"></param>
+        /// <param name="ctrl"></param>
         public static void MapCustom(int device, VGState cState, VGState MappedState, VGStateExposed eState, Mouse tp, ControlService ctrl)
         {
 
@@ -1012,6 +1021,8 @@ namespace VirtualGamepad4Windows
                 }
             // else
             // MappedState.RY = cState.RY;
+            
+            //鼠标指针位置设定
             InputMethods.MoveCursorBy(MouseDeltaX, MouseDeltaY);
         }
 

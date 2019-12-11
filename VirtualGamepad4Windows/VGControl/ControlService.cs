@@ -156,5 +156,9 @@ namespace VirtualGamepad4Windows
             else
                 return Properties.Resources.NA;
         }
+        //每次新输入报告到达时调用
+        protected virtual void On_Report(object sender, EventArgs e)
+        {
+        }
     }
 }

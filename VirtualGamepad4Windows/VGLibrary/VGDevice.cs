@@ -232,6 +232,9 @@ namespace VirtualGamepad4Windows
             sixAxis = new DS4SixAxis();
         }
 
+        /// <summary>
+        /// 启动输入更新线程
+        /// </summary>
         public void StartUpdate()
         {
             if (ds4Input == null)
@@ -331,6 +334,10 @@ namespace VirtualGamepad4Windows
         public double Latency = 0;
         bool warn;
         public string error;
+
+        /// <summary>
+        /// 执行设备输入函数
+        /// </summary>
         private void performDs4Input()
         {
             firstActive = DateTime.UtcNow;
