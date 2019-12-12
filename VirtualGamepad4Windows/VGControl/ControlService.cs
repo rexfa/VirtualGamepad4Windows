@@ -97,6 +97,8 @@ namespace VirtualGamepad4Windows
         {
             if (running)
             {
+                VGDevicePool.findControllers();
+                IEnumerable<VGDevice> devices = VGDevicePool.getVGControllers();
                 //findControllers
                 //foreach (DS4Device device in devices)
                 //{

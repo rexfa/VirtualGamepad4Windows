@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
-namespace VirtualGamepad4Windows.VGLibrary
+namespace VirtualGamepad4Windows
 {
     public class VGDevicePool
     {
